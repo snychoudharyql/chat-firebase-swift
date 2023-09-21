@@ -18,5 +18,6 @@ public enum FieldType: String {
     case users
     case email
     case text
+    case UID = "uid"
     case groupName = "group_name"
 }
