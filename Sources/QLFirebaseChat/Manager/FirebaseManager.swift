@@ -91,7 +91,7 @@ public class FirebaseManager {
                 completion(nil)
             } else {
                 if let document = querySnapshot?.documents.first {
-                    if let userName = document.data()["name"] as? String {
+                    if let userName = document.data()[kName] as? String {
                         completion(userName)
                     } else {
                         completion(nil)
@@ -130,7 +130,7 @@ public class FirebaseManager {
     /// Fetch messages from the receivers by current user
     public func fetchMessages(with documentID: String, completion: @escaping ([QueryDocumentSnapshot]?) ->Void) {
         let parentDocumentReference = database.collection(kMessages).document(documentID)
-        parentDocumentReference.collection(kMessage).order(by: "kSendTime", descending: false).addSnapshotListener { (querySnapshot, error) in
+        parentDocumentReference.collection(kMessage).order(by: kSendTime, descending: false).addSnapshotListener { (querySnapshot, error) in
             if let error = error {
                 debugPrint("Error fetching documents: \(error.localizedDescription)")
             } else {
