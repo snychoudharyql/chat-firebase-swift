@@ -5,12 +5,13 @@ import PackageDescription
 
 let package = Package(
     name: "QLFirebaseChat",
-    platforms: [.iOS(.v13),],
+    platforms: [.iOS(.v13)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "QLFirebaseChat",
-            targets: ["QLFirebaseChat"]),
+            targets: ["QLFirebaseChat"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.0.0"),
@@ -23,8 +24,9 @@ let package = Package(
             dependencies: [
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk")
+                .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk"),
                 // Add other Firebase products as needed
-            ]),
+            ]
+        ),
     ]
 )

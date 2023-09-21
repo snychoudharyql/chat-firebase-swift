@@ -7,9 +7,8 @@
 
 import Foundation
 
-
 public enum CollectionType: String {
-    case users = "users"
-    case messages = "messages"
-    case message = "message"
+    case users
+    case messages
+    case message
 }

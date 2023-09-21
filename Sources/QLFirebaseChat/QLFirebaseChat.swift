@@ -1,8 +1,8 @@
-import Firebase
 import Combine
+import Firebase
 
-public class QLChatFirebase {
+public enum QLChatFirebase {
     public static func initialize() {
         FirebaseApp.configure()
-       }
+    }
 }
