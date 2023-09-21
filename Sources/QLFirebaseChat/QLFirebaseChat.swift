@@ -3,6 +3,6 @@ import Combine
 
 public class QLChatFirebase {
     public static func initialize() {
-           FirebaseInitializer.configure()
+        FirebaseApp.configure()
        }
 }
