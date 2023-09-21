@@ -10,65 +10,85 @@ import SwiftUI
 struct ChatMessageView: View {
     @StateObject var userVM = UserViewModel()
     @Environment(\.dismiss) private var dismiss
-    var documentID = ""
-    var headerTitle = ""
+    @State var documentID = ""
+    var memberName = ""
+    var messageType = MessageType.initiated
+    var memberID = ""
+    
     var body: some View {
-        GeometryReader(content: { geometry in
-            
-            VStack{
-                VStack(alignment: .leading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image("back").resizable()
-                            .frame(width: 25, height: 25)
-                    }.padding(.leading, 20)
-                    HStack(alignment: .center) {
-                        Image("profile").resizable()
-                            .frame(width: 60, height: 60)
-                            .cornerRadius(40)
-                            .padding(.leading, 20)
-                        
-                        Text(headerTitle)
-                            .foregroundColor(.black)
-                            .font(.system(size: 20))
-                            .fontWeight(.semibold)
-                        Spacer()
-                        
-                    }
-                    .frame(width: geometry.size.width, height: 80)
-                } .background(content: {
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.purple, Color.blue.opacity(0.6)]),
-                               startPoint: .leading,
-                               endPoint: .trailing
-                           )
-                    .edgesIgnoringSafeArea(.all)
-                })
-         
-                .padding(.bottom, 20)
-                ScrollViewReader { scrollView in
-                    List(userVM.messageList, id: \.id) { message in
-                        MessageView(message: message)
-                            .listRowSeparator(.hidden)
-                    }.listStyle(.plain)
-                    //onChange(of: userVM.messageList.count, perform: {_ in
-                       // scrollView.scrollTo(userVM.messageList.last?.id)
-                    //})
-                   // scrollView.scrollTo(userVM.messageList.last?.id)
-                }
-                    
-                MessageInputField(messagesManager: userVM, documentID: documentID)
+        GeometryReader { geometry in
+            VStack {
+                navigationHeader
+                headerContent(geometry: geometry)
+                messageList
+                MessageInputField(messagesManager: userVM, documentID: documentID, receiverEmail: memberID)
             }
+            .navigationBarBackButtonHidden(true)
+            .onAppear {
+                userVM.messageList(documentID: documentID)
+            }
+        }
+    }
+    
+    private var navigationHeader: some View {
+        VStack(alignment: .leading) {
+            Button {
+                dismiss()
+            } label: {
+                Image("back")
+                    .resizable()
+                    .frame(width: 25, height: 25)
+            }
+            .padding(.leading, 20)
             
-            
-        })
-        .navigationBarBackButtonHidden(true)
-        .onAppear {
-            userVM.messageList(documentID: documentID)
+            HStack(alignment: .center) {
+                Image("profile")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                    .cornerRadius(40)
+                    .padding(.leading, 20)
+                
+                Text(memberName)
+                    .foregroundColor(.black)
+                    .font(.system(size: 20))
+                    .fontWeight(.semibold)
+                
+                Spacer()
+            }
+            .frame(width: UIScreen.main.bounds.width, height: 80)
+        }
+        .background(
+            LinearGradient(
+                gradient: Gradient(colors: [Color.purple, Color.blue.opacity(0.6)]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .edgesIgnoringSafeArea(.all)
+        )
+        .padding(.bottom, 20)
+    }
+    
+    private func headerContent(geometry: GeometryProxy) -> some View {
+        EmptyView()
+    }
+    
+    private var messageList: some View {
+        ScrollViewReader { scrollView in
+            List(userVM.messageList, id: \.id) { message in
+                MessageView(message: message)
+                    .listRowSeparator(.hidden)
+            }
+            .listStyle(.plain)
+            .onChange(of: userVM.messageList.count) { _ in
+                //scrollView.scrollTo(userVM.messageList.last?.id)
+            }
+            .onAppear {
+                scrollView.scrollTo(userVM.messageList.last?.id)
+            }
         }
     }
 }
+
 
 struct ChatMessageView_Previews: PreviewProvider {
     static var previews: some View {

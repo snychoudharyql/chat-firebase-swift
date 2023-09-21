@@ -15,3 +15,9 @@ struct Colors {
 
 let userStatus = "USER_STATUS"
 let kBackButton = "back"
+let kAddMember = "addMember"
+
+enum MessageType {
+    case initiated
+    case partial
+}

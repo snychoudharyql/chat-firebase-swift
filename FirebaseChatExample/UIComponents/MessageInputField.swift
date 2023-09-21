@@ -6,12 +6,18 @@
 //
 
 import SwiftUI
+import QLFirebaseChat
 
 struct MessageInputField: View {
+    
+    // MARK: - Properties
     @ObservedObject var messagesManager: UserViewModel
     @State private var message = ""
     var documentID: String
-
+    var receiverEmail = ""
+    
+    // MARK: - body
+    
     var body: some View {
         HStack {
             // Custom text field created below
@@ -20,7 +26,12 @@ struct MessageInputField: View {
                 .disableAutocorrection(true)
 
             Button {
-                messagesManager.message(text: message, documentID: documentID)
+                if !documentID.isEmpty {
+                    messagesManager.message(text: message, documentID: documentID)
+                } else {
+                
+                    messagesManager.chatInitiateWithMessage(uIDs: [FirebaseManager.shared.getCurrentUser(), receiverEmail], text: message)
+                }
                 message = ""
             } label: {
                 Image(systemName: "paperplane.fill")
@@ -35,6 +46,8 @@ struct MessageInputField: View {
         .background(Color("Gray"))
         .cornerRadius(50)
         .padding()
+        
+        
     }
 }
 

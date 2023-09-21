@@ -14,6 +14,7 @@
 		8C195EAC2AB80F4200EA267A /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C195EAB2AB80F4200EA267A /* CustomTextField.swift */; };
 		8C195EAE2AB8107900EA267A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C195EAD2AB8107900EA267A /* Message.swift */; };
 		8C195EB82AB83A8E00EA267A /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C195EB72AB83A8E00EA267A /* ChatMessageView.swift */; };
+		8C6C8F242ABC4077002D4026 /* ContactManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C8F232ABC4077002D4026 /* ContactManager.swift */; };
 		8C7BCE432AB8527000EB8161 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C7BCE422AB8527000EB8161 /* GoogleService-Info.plist */; };
 		8CB704BA2AB85E8D00516D00 /* QLFirebaseChat in Frameworks */ = {isa = PBXBuildFile; productRef = 8CB704B92AB85E8D00516D00 /* QLFirebaseChat */; };
 		8CB704BC2AB8612C00516D00 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB704BB2AB8612C00516D00 /* ActivityIndicator.swift */; };
@@ -42,6 +43,7 @@
 		8C195EAB2AB80F4200EA267A /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		8C195EAD2AB8107900EA267A /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		8C195EB72AB83A8E00EA267A /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
+		8C6C8F232ABC4077002D4026 /* ContactManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactManager.swift; sourceTree = "<group>"; };
 		8C7BCE422AB8527000EB8161 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8CB704BB2AB8612C00516D00 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		8CB704BD2AB864A500516D00 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				8C195EA02AB809C700EA267A /* Constant.swift */,
+				8C6C8F232ABC4077002D4026 /* ContactManager.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				8CE390E12AB461340068AF14 /* LoginView.swift in Sources */,
 				8CE391032AB469830068AF14 /* ImagePicker.swift in Sources */,
 				8CE390F72AB469790068AF14 /* UserViewModel.swift in Sources */,
+				8C6C8F242ABC4077002D4026 /* ContactManager.swift in Sources */,
 				8CE391042AB469830068AF14 /* View+Extension.swift in Sources */,
 				8CE391062AB469FC0068AF14 /* User.swift in Sources */,
 				8CB704BC2AB8612C00516D00 /* ActivityIndicator.swift in Sources */,
@@ -415,11 +419,13 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSContactsUsageDescription = "We need access to your contacts to provide contact syncing.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -446,11 +452,13 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSContactsUsageDescription = "We need access to your contacts to provide contact syncing.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

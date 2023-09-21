@@ -6,73 +6,177 @@
 //
 
 import SwiftUI
+import QLFirebaseChat
 
 struct UserListView: View {
-    @StateObject var userVM  = UserViewModel()
+    // MARK: - Properties
+    
+    @StateObject var userVM = UserViewModel()
     @Environment(\.dismiss) private var dismiss
-    @State var isOpenChatMessage = false
-    @State var individualUser = ChatListUser()
+    @State var individualUser = [ChatListUser]()
+    @State var selectedUsers: [User] = []
+    @State var isMultiSelectionActive = false
+    @State private var isAlertPresented = false
+    @State private var userInput = ""
+    @Binding var dismissPresented: Bool
+    @State var isSelectedUser = false
+    @State var singleUser = User()
+    
+    // MARK:  Body
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(kBackButton).resizable()
-                        .frame(width: 26, height: 24)
-                }
+        ZStack(alignment: .bottomTrailing) {
+            VStack(alignment: .leading) {
+                navigationHeader
                 
-                Text("User List")
-                    .font(.title)
-            }.padding(.top, 24)
-            List(userVM.users, id: \.id) { item in
-                userDetail(chatUser: item)
+                List(userVM.users, id: \.email) { item in
+                    userDetail(chatUser: item, isSelect: selectedUsers.contains(where: { user in
+                        user.email == item.email
+                    }))
                     .onTapGesture {
-                        userVM.isMemberChatInitiated(with: item.uid ?? "") { users in
-                            if (users ?? []).isEmpty {
-                                userVM.chatInitate(groupName: "", uID: item.uid ?? "")
-                            } else {
-                                individualUser = (users?.last)!
-                                individualUser.id = (users?.last)!.id
-                                isOpenChatMessage = true
-                            }
-                        }
-                      //
+                        handleUserTap(item)
                     }
-                .listRowSeparator(.hidden)
-                
+                    .listRowSeparator(.hidden)
+                }
+                .listStyle(.plain)
             }
-            .listStyle(.plain)
-        }.padding(.horizontal, 20)
+            .padding(.horizontal, 20)
+            
+            groupChatButton
+            
+        }
+        .alert("Group", isPresented: $isAlertPresented) {
+            TextField("Name", text: $userInput)
+            Button("OK", action: createGroupChat)
+        }
         .onAppear {
             userVM.getUserList()
         }
         .navigationBarBackButtonHidden(true)
-        NavigationLink("", destination: ChatMessageView(documentID: individualUser.id ?? "2D19A92C-7AFF-438F-99DA-8DBE49C62137", headerTitle: individualUser.receiverName ?? ""), isActive: $isOpenChatMessage)
         
+        navigationLinkToChat
     }
     
-    @ViewBuilder
-    func userDetail(chatUser: User) -> some View {
-            HStack {
-                Image("profile").resizable()
-                    .frame(width: 30, height: 30).cornerRadius(30)
-                Text(chatUser.name ?? "Abhi")
-                    .fontWeight(.medium)
-                Spacer()
-            }.padding(.vertical, 10).padding(.leading, 10).background {
-                Color.gray.opacity(0.15)
-            }.frame(width: 360)
-             .cornerRadius(10)
-          
+    private var navigationHeader: some View {
+        HStack {
+            Button {
+                dismiss()
+            } label: {
+                Image(kBackButton)
+                    .resizable()
+                    .frame(width: 26, height: 24)
+            }
+            Text("User List")
+                .font(.title)
+            Spacer()
+            toggleMultiSelectionButton
+        }
+        .padding(.top, 24)
     }
     
+    private var toggleMultiSelectionButton: some View {
+        Button(action: {
+            isMultiSelectionActive.toggle()
+            selectedUsers = []
+        }) {
+            Text(isMultiSelectionActive ? "Remove" : "Create Group Chat")
+        }
+    }
+    
+    private var groupChatButton: some View {
+        Group {
+            if !selectedUsers.isEmpty {
+                Button {
+                    isAlertPresented = true
+                } label: {
+                    Image(kAddMember)
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                }
+                .padding(.bottom, 20)
+                .padding(.trailing, 20)
+            }
+        }
+    }
+    
+    private var navigationLinkToChat: some View {
+        NavigationLink("", destination: chatDestination, isActive: $isSelectedUser)
+    }
+    
+    private var chatDestination: some View {
+        Group {
+            if individualUser.isEmpty {
+                ChatMessageView(documentID: "", memberName: singleUser.name ?? "",
+                                memberID: singleUser.email ?? "")
+            } else if let individualUser = individualUser.first, let id = individualUser.id {
+                ChatMessageView(documentID: id,
+                                memberName: individualUser.receiverName ?? "")
+            } else {
+                EmptyView()
+            }
+        }
+    }
+    
+    private func handleUserTap(_ user: User) {
+        if isMultiSelectionActive {
+            toggleSelection(for: user)
+        } else {
+            initiateChat(with: user)
+        }
+    }
+    
+    private func initiateChat(with user: User) {
+        singleUser = user
+        userVM.isMemberChatInitiated(with: user.email ?? "") { users in
+            individualUser = users ?? []
+            isSelectedUser = true
+        }
+    }
+    
+    private func createGroupChat() {
+        let emailArray = selectedUsers.map { $0.email ?? "" }
+        userVM.chatInitate(groupName: userInput, uIDs: ([FirebaseManager.shared.getCurrentUser()] + emailArray)) { isSuccess in
+            dismissPresented = false
+        }
+    }
+    
+    private func toggleSelection(for user: User) {
+        if let index = selectedUsers.firstIndex(where: { $0.email == user.email }) {
+            selectedUsers.remove(at: index)
+        } else {
+            selectedUsers.append(user)
+        }
+    }
 }
 
 struct UserListView_Previews: PreviewProvider {
     static var previews: some View {
-        UserListView()
+        UserListView(dismissPresented: .constant(false))
     }
 }
 
+
+
+extension UserListView  {
+    
+    @ViewBuilder
+    func userDetail(chatUser: User, isSelect: Bool) -> some View {
+        HStack {
+            Image("profile").resizable()
+                .frame(width: 30, height: 30).cornerRadius(30)
+            Text(chatUser.name ?? "")
+                .fontWeight(.medium)
+            Spacer()
+            if isMultiSelectionActive {
+                Image(isSelect ? "select" : "unSelect").resizable()
+                    .frame(width: 20, height:20)
+                    .padding(.trailing, 20)
+            }
+            
+        }.padding(.vertical, 10).padding(.leading, 10).background {
+            Color.gray.opacity(0.15)
+        }.frame(width: 360)
+            .cornerRadius(10)
+        
+    }
+}

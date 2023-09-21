@@ -46,7 +46,7 @@ struct ChatListView: View {
                 }
                 
                 List(userVM.chatList, id: \.id) { item in
-                    NavigationLink(destination: ChatMessageView(documentID: item.id ?? "", headerTitle: item.receiverName ?? "")) {
+                    NavigationLink(destination: ChatMessageView(documentID: item.id ?? "", memberName: item.receiverName ?? "")) {
                         MessageMember(name: item.receiverName ?? "")
                     }
                 //.listRowSeparator(.hidden)
@@ -56,7 +56,7 @@ struct ChatListView: View {
                 
             }
             .navigationBarBackButtonHidden(true)
-            NavigationLink("", destination: UserListView(), isActive: $isAddNewGroup)
+            NavigationLink("", destination: UserListView( dismissPresented: $isAddNewGroup), isActive: $isAddNewGroup)
             
         })
         .onAppear {
