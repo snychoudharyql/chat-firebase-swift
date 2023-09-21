@@ -33,6 +33,7 @@ class UserViewModel: ObservableObject {
             self.isLoading = false
             switch result {
             case .success:
+                self.isUserSuccessfulLogin = true
                 UserDefaults.standard.set(true, forKey: userStatus)
             case .failure(let failure):
                 self.errorMessage.message = failure.localizedDescription
@@ -75,6 +76,19 @@ class UserViewModel: ObservableObject {
     func getUserList() {
         ContactManager.shared.fetchContacts { fetchUser in
             self.users = fetchUser
+            let group = DispatchGroup()
+            
+            for i in 0..<fetchUser.count {
+                group.enter()
+                FirebaseManager.shared.getUserName(forUID: fetchUser[i].email ?? "", type: .email) { name, uid in
+                    fetchUser[i].isOnContact = !(name == nil)
+                    fetchUser[i].uid = uid ?? ""
+                    group.leave()
+                }
+            }
+            group.notify(queue: .main) {
+                self.users = fetchUser
+            }
         }
     }
     
@@ -104,8 +118,8 @@ class UserViewModel: ObservableObject {
                             if chatMemebers[i].users?.count == 2 {
                                 chatMemebers[i].users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser() }
                                 if let firstUserID = chatMemebers[i].users?.first {
-                                    print("appearance: ", i)
-                                    FirebaseManager.shared.getUserName(forUID: firstUserID) { name in
+                                    //print("appearance: ", i)
+                                    FirebaseManager.shared.getUserName(forUID: firstUserID, type: .UID) { name, _ in
                                         if let memberName = name {
                                             chatMemebers[i].receiverName = memberName
                                         }
@@ -227,7 +241,7 @@ class UserViewModel: ObservableObject {
                             group.enter()
                             chatMemebers[i].users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser() }
                             if let firstUserID = chatMemebers[i].users?.first {
-                                FirebaseManager.shared.getUserName(forUID: firstUserID) { name in
+                                FirebaseManager.shared.getUserName(forUID: firstUserID, type: .UID) { name, _ in
                                     if let memberName = name {
                                         chatMemebers[i].receiverName = memberName
                                        

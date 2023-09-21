@@ -21,7 +21,7 @@ struct ChatMessageView: View {
                 navigationHeader
                 headerContent(geometry: geometry)
                 messageList
-                MessageInputField(messagesManager: userVM, documentID: documentID, receiverEmail: memberID)
+                MessageInputField(messagesManager: userVM, documentID: $documentID, receiverID: memberID)
             }
             .navigationBarBackButtonHidden(true)
             .onAppear {
@@ -77,16 +77,23 @@ struct ChatMessageView: View {
             List(userVM.messageList, id: \.id) { message in
                 MessageView(message: message)
                     .listRowSeparator(.hidden)
+                    .id(message.id)
             }
             .listStyle(.plain)
-            .onChange(of: userVM.messageList.count) { _ in
-                //scrollView.scrollTo(userVM.messageList.last?.id)
-            }
+//            .onChange(of: userVM.messageList.count) { newValue in
+//               // if newValue > userVM.messageList.count {
+//                    if let id = userVM.messageList.last?.id {
+//                        scrollView.scrollTo(id)
+//                    }
+//                //}
+//            }
             .onAppear {
                 scrollView.scrollTo(userVM.messageList.last?.id)
             }
         }
     }
+    
+
 }
 
 

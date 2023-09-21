@@ -17,10 +17,10 @@ struct FirebaseChatExampleApp: App {
         WindowGroup {
             NavigationStack {
                 if UserDefaults.standard.bool(forKey: userStatus) {
-                    ChatListView()
+                   ChatListView()
                 } else {
-                    LoginView()
-                }
+                   LoginView()
+                 }
             }
         }
     }

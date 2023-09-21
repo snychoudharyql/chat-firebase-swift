@@ -18,7 +18,7 @@ struct UserListView: View {
     @State var isMultiSelectionActive = false
     @State private var isAlertPresented = false
     @State private var userInput = ""
-    @Binding var dismissPresented: Bool
+    @Binding var dismissPresented: Bool // remove this
     @State var isSelectedUser = false
     @State var singleUser = User()
     
@@ -107,7 +107,7 @@ struct UserListView: View {
         Group {
             if individualUser.isEmpty {
                 ChatMessageView(documentID: "", memberName: singleUser.name ?? "",
-                                memberID: singleUser.email ?? "")
+                                memberID: singleUser.uid ?? "")
             } else if let individualUser = individualUser.first, let id = individualUser.id {
                 ChatMessageView(documentID: id,
                                 memberName: individualUser.receiverName ?? "")
@@ -118,10 +118,12 @@ struct UserListView: View {
     }
     
     private func handleUserTap(_ user: User) {
-        if isMultiSelectionActive {
-            toggleSelection(for: user)
-        } else {
-            initiateChat(with: user)
+        if user.isOnContact ?? false  {
+            if isMultiSelectionActive {
+                toggleSelection(for: user)
+            } else {
+                initiateChat(with: user)
+            }
         }
     }
     
@@ -134,9 +136,9 @@ struct UserListView: View {
     }
     
     private func createGroupChat() {
-        let emailArray = selectedUsers.map { $0.email ?? "" }
+        let emailArray = selectedUsers.map { $0.uid ?? "" }
         userVM.chatInitate(groupName: userInput, uIDs: ([FirebaseManager.shared.getCurrentUser()] + emailArray)) { isSuccess in
-            dismissPresented = false
+            dismiss()
         }
     }
     
@@ -167,10 +169,24 @@ extension UserListView  {
             Text(chatUser.name ?? "")
                 .fontWeight(.medium)
             Spacer()
-            if isMultiSelectionActive {
-                Image(isSelect ? "select" : "unSelect").resizable()
-                    .frame(width: 20, height:20)
-                    .padding(.trailing, 20)
+            if chatUser.isOnContact ?? false  {
+                if isMultiSelectionActive {
+                    Image(isSelect ? "select" : "unSelect").resizable()
+                        .frame(width: 20, height:20)
+                        .padding(.trailing, 20)
+                }
+            } else {
+                Button {
+                    
+                } label: {
+                    Text("Invite")
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                    
+                        .foregroundColor(.white)
+                        .background(.green)
+                }.padding(.trailing, 10)
+
             }
             
         }.padding(.vertical, 10).padding(.leading, 10).background {
