@@ -12,3 +12,11 @@ public enum CollectionType: String {
     case messages
     case message
 }
+
+public enum FieldType: String {
+    case id
+    case users
+    case email
+    case text
+    case groupName = "group_name"
+}

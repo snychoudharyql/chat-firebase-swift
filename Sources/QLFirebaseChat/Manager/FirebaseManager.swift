@@ -86,9 +86,9 @@ public class FirebaseManager {
     // MARK: - GetUserName
 
     /// Get the user detail by UID
-    public func getUserName(forUID uid: String, completion: @escaping (String?) -> Void) {
+    public func getUserName(forUID uid: String, type: FieldType, completion: @escaping (String?) -> Void) {
         let usersCollection = database.collection(kUsers)
-        usersCollection.whereField(kUID, isEqualTo: uid).getDocuments { querySnapshot, error in
+        usersCollection.whereField(type.rawValue, isEqualTo: uid).getDocuments { querySnapshot, error in
             if let error {
                 print("Error getting user document: \(error.localizedDescription)")
                 completion(nil)
