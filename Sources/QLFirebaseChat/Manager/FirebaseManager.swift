@@ -88,7 +88,7 @@ public class FirebaseManager {
     /// Get the user detail by UID
     public func getUserName(forUID uid: String, completion: @escaping (String?) -> Void) {
         let usersCollection = database.collection(kUsers)
-        usersCollection.whereField(kEmail, isEqualTo: uid).getDocuments { querySnapshot, error in
+        usersCollection.whereField(kUID, isEqualTo: uid).getDocuments { querySnapshot, error in
             if let error {
                 print("Error getting user document: \(error.localizedDescription)")
                 completion(nil)
@@ -110,7 +110,7 @@ public class FirebaseManager {
 
     /// Get current user email ID
     public func getCurrentUser() -> String {
-        if let email = Auth.auth().currentUser?.email {
+        if let email = Auth.auth().currentUser?.uid {
             return email
         }
         return ""
