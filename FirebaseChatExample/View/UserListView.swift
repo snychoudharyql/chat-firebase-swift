@@ -137,7 +137,7 @@ struct UserListView: View {
     
     private func createGroupChat() {
         let emailArray = selectedUsers.map { $0.uid ?? "" }
-        userVM.chatInitate(groupName: userInput, uIDs: ([FirebaseManager.shared.getCurrentUser()] + emailArray)) { isSuccess in
+        userVM.chatInitate(groupName: userInput, uIDs: ([FirebaseManager.shared.getCurrentUser(with: .UID)] + emailArray)) { isSuccess in
             dismiss()
         }
     }

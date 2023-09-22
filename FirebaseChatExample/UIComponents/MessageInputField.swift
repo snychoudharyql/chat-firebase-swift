@@ -56,7 +56,7 @@ struct MessageInputField: View {
         } else if !messagesManager.initiatedDocumentID.isEmpty {
             messagesManager.message(text: message, documentID: messagesManager.initiatedDocumentID)
         } else {
-            messagesManager.chatInitiateWithMessage(uIDs: [FirebaseManager.shared.getCurrentUser(), receiverID], text: message)
+            messagesManager.chatInitiateWithMessage(uIDs: [FirebaseManager.shared.getCurrentUser(with: .UID), receiverID], text: message)
         }
         message = ""
     }

@@ -13,14 +13,14 @@ struct MessageView: View {
     @State private var showTime = false
     
     var body: some View {
-        VStack(alignment: message.sender_id != FirebaseManager.shared.getCurrentUser() ? .leading : .trailing) {
+        VStack(alignment: message.sender_id != FirebaseManager.shared.getCurrentUser(with: .UID) ? .leading : .trailing) {
             HStack {
                 Text(message.text ?? "")
                     .padding()
-                    .background(message.sender_id != FirebaseManager.shared.getCurrentUser() ? Color("Gray") : Color("Peach"))
+                    .background(message.sender_id != FirebaseManager.shared.getCurrentUser(with: .UID) ? Color("Gray") : Color("Peach"))
                     .cornerRadius(30)
             }
-            .frame(maxWidth: 300, alignment: message.sender_id != FirebaseManager.shared.getCurrentUser() ? .leading : .trailing)
+            .frame(maxWidth: 300, alignment: message.sender_id != FirebaseManager.shared.getCurrentUser(with: .UID) ? .leading : .trailing)
             .onTapGesture {
                 showTime.toggle()
             }
@@ -29,11 +29,11 @@ struct MessageView: View {
                 Text("\((message.sender_time!))")//.formatted(.dateTime.hour().minute()))")
                     .font(.caption2)
                     .foregroundColor(.gray)
-                    .padding(message.sender_id != FirebaseManager.shared.getCurrentUser() ? .leading : .trailing, 25)
+                    .padding(message.sender_id != FirebaseManager.shared.getCurrentUser(with: .UID) ? .leading : .trailing, 25)
             }
         }
-        .frame(maxWidth: .infinity, alignment: message.sender_id != FirebaseManager.shared.getCurrentUser() ? .leading : .trailing)
-        .padding(message.sender_id != FirebaseManager.shared.getCurrentUser() ? .leading : .trailing)
+        .frame(maxWidth: .infinity, alignment: message.sender_id != FirebaseManager.shared.getCurrentUser(with: .UID) ? .leading : .trailing)
+        .padding(message.sender_id != FirebaseManager.shared.getCurrentUser(with: .UID) ? .leading : .trailing)
         .padding(.horizontal, 10)
     }
 }

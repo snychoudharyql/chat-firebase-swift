@@ -27,7 +27,7 @@ class ChatViewModel: ObservableObject {
             
             for i in 0..<fetchUser.count {
                 group.enter()
-                FirebaseManager.shared.getUserName(forUID: fetchUser[i].email ?? "", type: .email) { name, uid in
+                FirebaseManager.shared.getUserDetail(forUID: fetchUser[i].email ?? "", type: .email) { name, uid in
                     fetchUser[i].isOnContact = !(name == nil)
                     fetchUser[i].uid = uid ?? ""
                     group.leave()
@@ -64,10 +64,9 @@ class ChatViewModel: ObservableObject {
                     for i in 0..<chatMemebers.count {
                         group.enter()
                         if chatMemebers[i].users?.count == 2 {
-                            chatMemebers[i].users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser() }
+                            chatMemebers[i].users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser(with: .UID) }
                             if let firstUserID = chatMemebers[i].users?.first {
-                                //print("appearance: ", i)
-                                FirebaseManager.shared.getUserName(forUID: firstUserID, type: .UID) { name, _ in
+                                FirebaseManager.shared.getUserDetail(forUID: firstUserID, type: .UID) { name, _ in
                                     if let memberName = name {
                                         chatMemebers[i].receiverName = memberName
                                     }
@@ -125,7 +124,7 @@ class ChatViewModel: ObservableObject {
     func message(text: String, documentID: String) {
         var message = [String: Any]()
         message["text"] = text
-        message["sender_id"]  = FirebaseManager.shared.getCurrentUser()
+        message["sender_id"]  = FirebaseManager.shared.getCurrentUser(with: .UID)
         message["send_time"] =  Timestamp(date: Date())
         FirebaseManager.shared.sendMessage(with: documentID, message: message, type: .message) { isSuccess in
             if isSuccess {
@@ -165,7 +164,7 @@ class ChatViewModel: ObservableObject {
     
     /// Check selected member have any chat with the curre
     func isMemberChatInitiated(with uID: String,completion: @escaping ([ChatListUser]?) ->Void){
-        FirebaseManager.shared.getIndividualChat(users: [FirebaseManager.shared.getCurrentUser(),uID]) { fetchChatList in
+        FirebaseManager.shared.getIndividualChat(user: uID) { fetchChatList in
             if fetchChatList == nil {
                 completion([])
             } else {
@@ -187,9 +186,9 @@ class ChatViewModel: ObservableObject {
                     group.leave()
                     for i in 0..<chatMemebers.count {
                         group.enter()
-                        chatMemebers[i].users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser() }
+                        chatMemebers[i].users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser(with: .UID) }
                         if let firstUserID = chatMemebers[i].users?.first {
-                            FirebaseManager.shared.getUserName(forUID: firstUserID, type: .UID) { name, _ in
+                            FirebaseManager.shared.getUserDetail(forUID: firstUserID, type: .UID) { name, _ in
                                 if let memberName = name {
                                     chatMemebers[i].receiverName = memberName
                                     
