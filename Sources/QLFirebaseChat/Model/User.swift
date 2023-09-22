@@ -8,11 +8,13 @@
 import FirebaseFirestoreSwift
 import Foundation
 
-class ChatUser: Codable, ObservableObject {
+public class ChatUser: Codable, ObservableObject {
     @DocumentID var id: String?
     var users: [String]?
     var groupName: String?
     var messageTitle: String?
     var receiverName: String?
     var lastMessage: String?
+
+    public init() {}
 }
