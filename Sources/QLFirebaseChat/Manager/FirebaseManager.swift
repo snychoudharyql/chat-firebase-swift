@@ -23,7 +23,7 @@ public class FirebaseManager {
 
     // MARK: Create New User
 
-    /// Register the new user in user collection a
+    /// Register the new user in user collection
     public func addNewUser(with user: [String: Any], id: String, collection type: CollectionType, completion: @escaping (_ isSuccess: Bool) -> Void) {
         let usersCollection = database.collection(type.rawValue)
         let userDocument = usersCollection.document(id)
