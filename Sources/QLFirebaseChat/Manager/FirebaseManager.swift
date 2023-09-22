@@ -56,7 +56,7 @@ public class FirebaseManager {
 
     /// Fetch the all member message who is already done the chat
     public func fetchChatList(with collectionName: String, completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
-        database.collection(collectionName).whereField(kUsers, arrayContains: getCurrentUser()).addSnapshotListener { querySnapshot, error in
+        database.collection(collectionName).whereField(kUsers, arrayContains: getCurrentUser(with: .UID)).addSnapshotListener { querySnapshot, error in
             if let error {
                 debugPrint("Error fetching users: \(error.localizedDescription)")
                 completion(nil)
@@ -83,10 +83,10 @@ public class FirebaseManager {
         }
     }
 
-    // MARK: - GetUserName
+    // MARK: - GetUserDetail
 
     /// Get the user detail by UID
-    public func getUserName(forUID uid: String, type: FieldType, completion: @escaping (String?, String?) -> Void) {
+    public func getUserDetail(forUID uid: String, type: FieldType, completion: @escaping (String?, String?) -> Void) {
         let usersCollection = database.collection(kUsers)
         usersCollection.whereField(type.rawValue, isEqualTo: uid).getDocuments { querySnapshot, error in
             if let error {
@@ -109,9 +109,15 @@ public class FirebaseManager {
     // MARK: - getCurrentUser
 
     /// Get current user email ID
-    public func getCurrentUser() -> String {
-        if let email = Auth.auth().currentUser?.uid {
-            return email
+    public func getCurrentUser(with field: FieldType) -> String {
+        if let currentUser = Auth.auth().currentUser {
+            if field == .email {
+                return currentUser.email ?? ""
+            } else if field == .UID {
+                return currentUser.uid
+            } else {
+                return currentUser.displayName ?? ""
+            }
         }
         return ""
     }
@@ -148,9 +154,10 @@ public class FirebaseManager {
 
     // MARK: -  GetIndividualChat
 
-    public func getIndividualChat(users: [String], completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
+    /// Get the individual the user all messages
+    public func getIndividualChat(user: String, completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
         database.collection(kMessages)
-            .whereField(kUsers, arrayContains: users.last!)
+            .whereField(kUsers, arrayContains: user)
             .getDocuments { querySnapshot, error in
                 if let error {
                     debugPrint("Error fetching users: \(error.localizedDescription)")
