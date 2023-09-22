@@ -11,12 +11,13 @@ public struct ChatListView: View {
     // MARK: - Properties
 
     public var delegate: ChatListDelegate?
-    @StateObject public var userVM = ChatViewModel()
+    @ObservedObject public var chatVM: ChatViewModel
 
     // MARK: - Public initializer
 
-    public init(delegate: ChatListDelegate? = nil) {
+    public init(delegate: ChatListDelegate? = nil, chatViewModel: ChatViewModel) {
         self.delegate = delegate
+        chatVM = chatViewModel
     }
 
     // MARK: - Body
@@ -25,13 +26,13 @@ public struct ChatListView: View {
         GeometryReader(content: { _ in
             VStack {
                 ZStack {
-                    ChatList.headerBackgroundColor.edgesIgnoringSafeArea(.all)
+                    chatVM.headerBackgroundColor.edgesIgnoringSafeArea(.all)
                     HStack(alignment: .center) {
-                        Text(ChatList.heading)
+                        Text(chatVM.headerTitle)
                             .font(.system(size: Size.thirtyFive))
                             .fontWeight(.bold)
                         Spacer()
-                        Image(ChatList.addMemberImageName).resizable()
+                        Image(chatVM.addGroupIcon).resizable()
                             .frame(width: Size.twentyFour, height: Size.twentyFour)
                             .padding(.trailing, Size.twenty)
                             .onTapGesture {
@@ -40,7 +41,7 @@ public struct ChatListView: View {
                     }
                 }.frame(height: Size.hundred)
 
-                List(userVM.chatList, id: \.id) { chat in
+                List(chatVM.chatList, id: \.id) { chat in
                     MessageMember(chat: chat)
                         .onTapGesture {
                             delegate?.getMemberChat(chat: chat)
@@ -51,7 +52,7 @@ public struct ChatListView: View {
             .navigationBarBackButtonHidden(true)
         })
         .onAppear {
-            userVM.getChatList()
+            chatVM.getChatList()
         }
         .navigationBarBackButtonHidden(true)
     }

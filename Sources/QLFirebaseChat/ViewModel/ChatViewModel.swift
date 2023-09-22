@@ -7,6 +7,7 @@
 
 import Firebase
 import Foundation
+import SwiftUI
 
 public class ChatViewModel: ObservableObject {
     // MARK: - Properties
@@ -16,9 +17,18 @@ public class ChatViewModel: ObservableObject {
     @Published var initiatedDocumentID = ""
     var collectionType = CollectionType.users
 
+    /// Customize properties of UI
+    let headerBackgroundColor: Color
+    let headerTitle: String
+    let addGroupIcon: String
+
     // MARK: Initialization
 
-    public init() {}
+    public init(title: String, headerBackgroundColor: Color, iconName: String) {
+        self.headerBackgroundColor = headerBackgroundColor
+        headerTitle = title
+        addGroupIcon = iconName
+    }
 
     // MARK: Get Chat List
 
