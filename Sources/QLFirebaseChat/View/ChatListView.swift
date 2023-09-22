@@ -10,6 +10,7 @@ import SwiftUI
 struct ChatListView: View {
     // MARK: - Properties
 
+    var delegate: ChatListDelegate?
     @StateObject var userVM = ChatViewModel()
 
     // MARK: - Body
@@ -24,16 +25,21 @@ struct ChatListView: View {
                             .font(.system(size: Size.thirtyFive))
                             .fontWeight(.bold).padding(.top, 10)
                         Spacer()
-                        NavigationLink {} label: {
-                            Image(ChatList.addMemberImageName).resizable()
-                                .frame(width: Size.twentyFour, height: Size.twentyFour)
-                        }.padding(.trailing, Size.ten)
+                        Image(ChatList.addMemberImageName).resizable()
+                            .frame(width: Size.twentyFour, height: Size.twentyFour)
+                            .padding(.trailing, Size.ten)
+                            .onTapGesture {
+                                delegate?.didTapButton()
+                            }
 
                     }.padding(.horizontal, Size.fifteen).padding(.vertical, Size.fifteen)
                 }
 
                 List(userVM.chatList, id: \.id) { chat in
                     MessageMember(chat: chat)
+                        .onTapGesture {
+                            delegate?.getMemberChat(chat: chat)
+                        }
                 }
                 .listStyle(.plain)
             }
