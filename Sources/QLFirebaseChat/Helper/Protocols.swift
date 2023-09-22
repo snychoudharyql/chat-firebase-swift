@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ChatListDelegate {
+public protocol ChatListDelegate {
     func didTapButton()
     func getMemberChat(chat: ChatUser)
 }

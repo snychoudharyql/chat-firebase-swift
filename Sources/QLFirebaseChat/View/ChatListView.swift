@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ChatListView: View {
+public struct ChatListView: View {
     // MARK: - Properties
 
     var delegate: ChatListDelegate?
@@ -15,7 +15,7 @@ struct ChatListView: View {
 
     // MARK: - Body
 
-    var body: some View {
+    public var body: some View {
         GeometryReader(content: { _ in
             VStack {
                 ZStack {
