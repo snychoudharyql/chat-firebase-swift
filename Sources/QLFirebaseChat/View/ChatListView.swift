@@ -10,8 +10,8 @@ import SwiftUI
 public struct ChatListView: View {
     // MARK: - Properties
 
-    var delegate: ChatListDelegate?
-    @StateObject var userVM = ChatViewModel()
+    public var delegate: ChatListDelegate?
+    @StateObject public var userVM = ChatViewModel()
 
     // MARK: - Body
 
