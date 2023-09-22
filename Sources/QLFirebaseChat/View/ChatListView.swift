@@ -25,21 +25,21 @@ public struct ChatListView: View {
         GeometryReader(content: { _ in
             VStack {
                 ZStack {
-                    ChatList.headerBackgroundColor
-                    HStack {
+                    Color.yellow.edgesIgnoringSafeArea(.all)
+                    HStack(alignment: .center) {
+                        Color.green
                         Text(ChatList.heading)
                             .font(.system(size: Size.thirtyFive))
-                            .fontWeight(.bold).padding(.top, 10)
+                            .fontWeight(.bold)
                         Spacer()
                         Image(ChatList.addMemberImageName).resizable()
                             .frame(width: Size.twentyFour, height: Size.twentyFour)
-                            .padding(.trailing, Size.ten)
+                            .padding(.trailing, Size.twenty)
                             .onTapGesture {
                                 delegate?.didTapButton()
                             }
-
-                    }.padding(.horizontal, Size.fifteen).padding(.vertical, Size.fifteen)
-                }
+                    }
+                }.frame(height: Size.hundred)
 
                 List(userVM.chatList, id: \.id) { chat in
                     MessageMember(chat: chat)

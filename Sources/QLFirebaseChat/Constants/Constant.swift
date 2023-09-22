@@ -10,6 +10,7 @@ public enum Size {
     static var twentyFour = 24.0
     static var fifty = 50.0
     static var twentyTwo = 22.0
+    static var hundred = 100.0
 }
 
 let kProfile = "profile"
