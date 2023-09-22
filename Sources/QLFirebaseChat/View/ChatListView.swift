@@ -15,7 +15,9 @@ public struct ChatListView: View {
 
     // MARK: - Public initializer
 
-    public init() {}
+    public init(delegate: ChatListDelegate? = nil) {
+        self.delegate = delegate
+    }
 
     // MARK: - Body
 
