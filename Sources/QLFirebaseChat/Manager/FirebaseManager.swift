@@ -23,7 +23,7 @@ public class FirebaseManager {
 
     // MARK: Create New User
 
-    /// Register the new user in user collection after the authentication
+    /// Register the new user in user collection a
     public func addNewUser(with user: [String: Any], id: String, collection type: CollectionType, completion: @escaping (_ isSuccess: Bool) -> Void) {
         let usersCollection = database.collection(type.rawValue)
         let userDocument = usersCollection.document(id)
@@ -55,8 +55,8 @@ public class FirebaseManager {
     // MARK: - fetchChatList
 
     /// Fetch the all member message who is already done the chat
-    public func fetchChatList(with collectionName: String, completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
-        database.collection(collectionName).whereField(kUsers, arrayContains: getCurrentUser(with: .UID)).addSnapshotListener { querySnapshot, error in
+    public func fetchChatList(with collection: CollectionType, completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
+        database.collection(collection.rawValue).whereField(kUsers, arrayContains: getCurrentUser(with: .UID)).addSnapshotListener { querySnapshot, error in
             if let error {
                 debugPrint("Error fetching users: \(error.localizedDescription)")
                 completion(nil)
