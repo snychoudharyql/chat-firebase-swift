@@ -13,6 +13,10 @@ public struct ChatListView: View {
     public var delegate: ChatListDelegate?
     @StateObject public var userVM = ChatViewModel()
 
+    // MARK: - Public initializer
+
+    public init() {}
+
     // MARK: - Body
 
     public var body: some View {
