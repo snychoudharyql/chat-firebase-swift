@@ -129,7 +129,7 @@ struct UserListView: View {
     
     private func initiateChat(with user: User) {
         singleUser = user
-        userVM.isMemberChatInitiated(with: user.email ?? "") { users in
+        userVM.isMemberChatInitiated(with: user.uid ?? "") { users in
             individualUser = users ?? []
             isSelectedUser = true
         }

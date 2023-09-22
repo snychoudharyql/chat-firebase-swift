@@ -36,13 +36,18 @@ struct MessageInputField: View {
     }
     
     private var sendButton: some View {
-        Button(action: sendMessage) {
+        Button {
+            if !message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                sendMessage()
+            }
+        } label: {
             Image(systemName: "paperplane.fill")
                 .foregroundColor(.white)
                 .padding(10)
-                .background(Color("Peach"))
+                .background( message.isEmpty ? Color("Peach") : .pink)
                 .cornerRadius(50)
         }
+
     }
     
     private func sendMessage() {
