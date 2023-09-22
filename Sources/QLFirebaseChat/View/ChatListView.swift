@@ -25,9 +25,8 @@ public struct ChatListView: View {
         GeometryReader(content: { _ in
             VStack {
                 ZStack {
-                    Color.yellow.edgesIgnoringSafeArea(.all)
+                    ChatList.headerBackgroundColor.edgesIgnoringSafeArea(.all)
                     HStack(alignment: .center) {
-                        Color.green
                         Text(ChatList.heading)
                             .font(.system(size: Size.thirtyFive))
                             .fontWeight(.bold)
