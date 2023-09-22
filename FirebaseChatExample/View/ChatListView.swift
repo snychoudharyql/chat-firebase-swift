@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ChatListView: View {
     @State var isAddNewGroup = false
-    @StateObject var userVM = UserViewModel()
+    @StateObject var userVM = ChatViewModel()
     var body: some View {
         GeometryReader(content: { geometry in
             VStack {

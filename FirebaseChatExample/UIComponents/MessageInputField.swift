@@ -12,7 +12,7 @@ import QLFirebaseChat
 struct MessageInputField: View {
     
     // MARK: - Properties
-    @StateObject var messagesManager: UserViewModel
+    @StateObject var messagesManager: ChatViewModel
     @State private var message = ""
     @Binding var documentID: String
     var receiverID = ""
@@ -63,7 +63,7 @@ struct MessageInputField: View {
     
     // MARK: - Lifecycle
     
-    init(messagesManager: UserViewModel, documentID: Binding<String>, receiverID: String) {
+    init(messagesManager: ChatViewModel, documentID: Binding<String>, receiverID: String) {
         self._messagesManager = StateObject(wrappedValue: messagesManager)
         self._documentID = documentID
         self.receiverID = receiverID

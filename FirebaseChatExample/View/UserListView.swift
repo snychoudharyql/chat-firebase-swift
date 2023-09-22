@@ -11,7 +11,7 @@ import QLFirebaseChat
 struct UserListView: View {
     // MARK: - Properties
     
-    @StateObject var userVM = UserViewModel()
+    @StateObject var userVM = ChatViewModel()
     @Environment(\.dismiss) private var dismiss
     @State var individualUser = [ChatListUser]()
     @State var selectedUsers: [User] = []

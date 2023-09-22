@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChatMessageView: View {
-    @StateObject var userVM = UserViewModel()
+    @StateObject var userVM = ChatViewModel()
     @Environment(\.dismiss) private var dismiss
     @State var documentID = ""
     var memberName = ""
