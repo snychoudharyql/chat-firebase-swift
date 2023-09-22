@@ -7,10 +7,14 @@
 
 import SwiftUI
 
-struct MessageMember: View {
-    // MA
-    var chat = ChatUser()
-    var body: some View {
+public struct MessageMember: View {
+    // MARK: - Properties
+
+    public var chat = ChatUser()
+
+    // MARK: - Body
+
+    public var body: some View {
         HStack(spacing: Size.twenty) {
             Image(kProfile)
                 .resizable()

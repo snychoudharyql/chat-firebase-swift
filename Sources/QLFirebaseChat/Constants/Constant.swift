@@ -2,7 +2,7 @@
 
 import Foundation
 
-struct Size {
+public enum Size {
     static var twenty = 20.0
     static var ten = 10.0
     static var fifteen = 15.0
