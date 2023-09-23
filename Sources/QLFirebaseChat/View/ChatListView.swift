@@ -41,6 +41,8 @@ public struct ChatListView: View {
                     }
                 }.frame(height: Size.hundred)
 
+                // MARK: Chat List
+
                 List(chatVM.chatList, id: \.id) { chat in
                     MessageMember(chat: chat)
                         .onTapGesture {
@@ -49,7 +51,6 @@ public struct ChatListView: View {
                 }
                 .listStyle(.plain)
             }
-            .navigationBarBackButtonHidden(true)
         })
         .onAppear {
             chatVM.getChatList()
