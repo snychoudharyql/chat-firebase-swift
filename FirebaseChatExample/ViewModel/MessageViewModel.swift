@@ -10,85 +10,16 @@ import QLFirebaseChat
 import Firebase
 
 
-class ChatViewModel: ObservableObject {
+class MessageViewModel: ObservableObject {
     // MARK: - Properties
-   
+    
     @Published var users = [User]()
     @Published var chatList = [ChatListUser]()
     @Published var initiatedDocumentID = ""
     var collectionType = CollectionType.users
     @Published var messageList = [MessageModel]()
     
-    // MARK: - GetUserList
-    func getUserList() {
-        ContactManager.shared.fetchContacts { fetchUser in
-            self.users = fetchUser
-            let group = DispatchGroup()
-            
-            for i in 0..<fetchUser.count {
-                group.enter()
-                FirebaseManager.shared.getUserDetail(forUID: fetchUser[i].email ?? "", type: .email) { name, uid in
-                    fetchUser[i].isOnContact = !(name == nil)
-                    fetchUser[i].uid = uid ?? ""
-                    group.leave()
-                }
-            }
-            group.notify(queue: .main) {
-                self.users = fetchUser
-            }
-        }
-    }
-    
-    
-    // MARK: Get Chat List
-    
-    func getChatList() {
-        FirebaseManager.shared.fetchChatList(with: "messages") { fetchChatList in
-            if fetchChatList == nil {
-                self.chatList = []
-            } else {
-                //DispatchQueue.main.async {
-                if let snapshots = fetchChatList {
-                    var chatMemebers = [ChatListUser]()
-                    let group = DispatchGroup()
-                    group.enter()
-                    chatMemebers = snapshots.compactMap { queryDocumentSnapshot in
-                        do {
-                            let message = try queryDocumentSnapshot.data(as: ChatListUser.self)
-                            return message
-                        } catch {
-                            return nil
-                        }
-                    }
-                    group.leave()
-                    for i in 0..<chatMemebers.count {
-                        group.enter()
-                        if chatMemebers[i].users?.count == 2 {
-                            chatMemebers[i].users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser(with: .UID) }
-                            if let firstUserID = chatMemebers[i].users?.first {
-                                FirebaseManager.shared.getUserDetail(forUID: firstUserID, type: .UID) { name, _ in
-                                    if let memberName = name {
-                                        chatMemebers[i].receiverName = memberName
-                                    }
-                                    group.leave()
-                                }
-                            }
-                        }else {
-                            chatMemebers[i].receiverName = chatMemebers[i].groupName
-                            group.leave()
-                        }
-                    }
-                    
-                    group.notify(queue: .main) {
-                        self.chatList = chatMemebers
-                    }
-                    
-                }
-                
-            }
-        }
-    }
-    
+ 
     // MARK: -  Initiate Chat
     
     func chatInitate(groupName: String, uIDs: [String], callback: @escaping(Bool) -> Void) {
@@ -96,6 +27,7 @@ class ChatViewModel: ObservableObject {
         chat["users"] = uIDs
         chat["group_name"] = groupName
         chat["id"]  = UUID().uuidString
+        chat["time_stamp"] = Timestamp(date: Date())
         FirebaseManager.shared.createGroup(with: chat, id: chat["id"] as! String, collection: .messages) { isSuccess in
             callback(true)
         }
@@ -105,8 +37,9 @@ class ChatViewModel: ObservableObject {
     func chatInitiateWithMessage(uIDs: [String], text: String) {
         var chat = [String: Any]()
         chat["users"] = uIDs
-        chat["groupName"] = ""
-        chat["id"]  = UUID().uuidString
+        chat["group_name"] = ""
+        chat["id"] = UUID().uuidString
+        chat["time_stamp"] = Timestamp(date: Date())
         if let documentID = chat["id"] as? String {
             FirebaseManager.shared.createGroup(with: chat, id: documentID, collection: .messages) { isSuccess in
                 if isSuccess {
@@ -125,7 +58,7 @@ class ChatViewModel: ObservableObject {
         var message = [String: Any]()
         message["text"] = text
         message["sender_id"]  = FirebaseManager.shared.getCurrentUser(with: .UID)
-        message["send_time"] =  Timestamp(date: Date())
+        message["send_time"] = Timestamp(date: Date())
         FirebaseManager.shared.sendMessage(with: documentID, message: message, type: .message) { isSuccess in
             if isSuccess {
                 debugPrint("createdMessage Successfully!!!")
@@ -160,9 +93,30 @@ class ChatViewModel: ObservableObject {
         }
     }
     
+
+    // MARK: - GetUserList
+    func getUserList() {
+        ContactManager.shared.fetchContacts { fetchUser in
+            self.users = fetchUser
+            let group = DispatchGroup()
+            
+            for i in 0..<fetchUser.count {
+                group.enter()
+                FirebaseManager.shared.getUserDetail(forUID: fetchUser[i].email ?? "", type: .email) { name, uid in
+                    fetchUser[i].isOnContact = !(name == nil)
+                    fetchUser[i].uid = uid ?? ""
+                    group.leave()
+                }
+            }
+            group.notify(queue: .main) {
+                self.users = fetchUser
+            }
+        }
+    }
+    
     // MARK: - isMemberChatInitiated
     
-    /// Check selected member have any chat with the curre
+    /// Check selected member have any chat with the current
     func isMemberChatInitiated(with uID: String,completion: @escaping ([ChatListUser]?) ->Void){
         FirebaseManager.shared.getIndividualChat(user: uID) { fetchChatList in
             if fetchChatList == nil {
@@ -207,5 +161,4 @@ class ChatViewModel: ObservableObject {
             }
         }
     }
-    
 }

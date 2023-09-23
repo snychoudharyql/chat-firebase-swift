@@ -12,9 +12,9 @@ import QLFirebaseChat
 struct MessageInputField: View {
     
     // MARK: - Properties
-    @StateObject var messagesManager: ChatViewModel
+    @StateObject var messagesManager: MessageViewModel
     @State private var message = ""
-    @Binding var documentID: String
+     var documentID = ""
     var receiverID = ""
     
     // MARK: - Body
@@ -31,7 +31,6 @@ struct MessageInputField: View {
     
     private var messageTextField: some View {
         CustomTextField(placeholder: Text("Enter your message here"), text: $message)
-            .frame(height: 52)
             .disableAutocorrection(true)
     }
     
@@ -63,9 +62,9 @@ struct MessageInputField: View {
     
     // MARK: - Lifecycle
     
-    init(messagesManager: ChatViewModel, documentID: Binding<String>, receiverID: String) {
+    init(messagesManager: MessageViewModel, documentID: String, receiverID: String) {
         self._messagesManager = StateObject(wrappedValue: messagesManager)
-        self._documentID = documentID
+        self.documentID = documentID
         self.receiverID = receiverID
     }
     

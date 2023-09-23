@@ -20,8 +20,11 @@ struct CustomTextField: View {
                 placeholder
                 .opacity(0.5)
             }
-            TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
-        }
+            
+            TextField("", text: $text, axis: .vertical)
+                //.frame(maxHeight: 100)
+
+        }.padding()
     }
 }
 

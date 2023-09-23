@@ -71,7 +71,7 @@ struct LoginView: View {
                 
             }
             
-            NavigationLink("", destination: ChatListView(), isActive: $user.isUserSuccessfulLogin)
+            NavigationLink("", destination: DashboardView(), isActive: $user.isUserSuccessfulLogin)
         })
     
         

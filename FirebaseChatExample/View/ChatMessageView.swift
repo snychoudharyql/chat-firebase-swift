@@ -8,26 +8,41 @@
 import SwiftUI
 
 struct ChatMessageView: View {
-    @StateObject var userVM = ChatViewModel()
+    // MARK: - Properties
+    
+    @StateObject var userVM = MessageViewModel()
     @Environment(\.dismiss) private var dismiss
-    @State var documentID = ""
+    var chatID = ""
     var memberName = ""
     var messageType = MessageType.initiated
     var memberID = ""
     
+    // MARK: - Initialization
+    init(chatID: String, memberName: String, memberID: String = "") {
+        self.chatID = chatID
+        self.memberName = memberName
+        self.memberID = memberID
+       // _userVM = StateObject(wrappedValue: MessageViewModel()) // Initialize userVM as a StateObject
+    }
+    
+    // MARK: - Body
+    
     var body: some View {
         GeometryReader { geometry in
-            VStack {
-                navigationHeader
-                headerContent(geometry: geometry)
-                messageList
-                MessageInputField(messagesManager: userVM, documentID: $documentID, receiverID: memberID)
-            }
-            .navigationBarBackButtonHidden(true)
-            .onAppear {
-                userVM.messageList(documentID: documentID)
+            ZStack(alignment: .bottom) {
+                VStack {
+                    navigationHeader
+                    headerContent(geometry: geometry)
+                    messageList
+                    MessageInputField(messagesManager: userVM, documentID: chatID, receiverID: memberID)
+                }
+            
             }
         }
+        .onAppear(perform: {
+            userVM.messageList(documentID: chatID)
+        })
+        .navigationBarBackButtonHidden(true)
     }
     
     private var navigationHeader: some View {
@@ -42,7 +57,7 @@ struct ChatMessageView: View {
             .padding(.leading, 20)
             
             HStack(alignment: .center) {
-                Image("profile")
+                Image(kProfile)
                     .resizable()
                     .frame(width: 60, height: 60)
                     .cornerRadius(40)
@@ -81,15 +96,16 @@ struct ChatMessageView: View {
             }
             .listStyle(.plain)
 //            .onChange(of: userVM.messageList.count) { newValue in
-//               // if newValue > userVM.messageList.count {
-//                    if let id = userVM.messageList.last?.id {
-//                        scrollView.scrollTo(id)
-//                    }
-//                //}
+//                withAnimation {
+//                    scrollView.scrollTo(newValue, anchor: .bottom)
+//                }
 //            }
             .onAppear {
-                scrollView.scrollTo(userVM.messageList.last?.id)
+                if !userVM.messageList.isEmpty {
+                  //  scrollView.scrollTo(userVM.messageList.last?.id)
+                }
             }
+            
         }
     }
     
@@ -97,8 +113,8 @@ struct ChatMessageView: View {
 }
 
 
-struct ChatMessageView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatMessageView()
-    }
-}
+//struct ChatMessageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ChatMessageView()
+//    }
+//}

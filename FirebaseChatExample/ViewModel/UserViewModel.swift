@@ -64,7 +64,7 @@ class UserViewModel: ObservableObject {
     func createNewUser(with userId: String) {
         var user  = [String: Any]()
         user["name"] = userName
-        user["email"] = userEmailID
+        user["email"] = userEmailID.lowercased()
         user["uid"]  = userId
         FirebaseManager.shared.addNewUser(with: user, id: userId, collection: .users) { isSuccess in
             self.isUserSuccessfulLogin = isSuccess

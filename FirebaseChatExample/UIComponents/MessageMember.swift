@@ -9,12 +9,12 @@ import SwiftUI
 
 struct MessageMember: View {
     var imageUrl = URL(string: "")
-    var name = "Abhishek"
+    var name = ""
    // @StateObject var message: UserViewModel
     
     var body: some View {
         HStack(spacing: 20) {
-            Image("profile")
+            Image(kProfile)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 50, height: 50)
