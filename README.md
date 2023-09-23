@@ -209,3 +209,6 @@ FirebaseManager.shared.getIndividualChat(user: userUID) { messages in
     }
 }
 ```
+## Requirements
+- **iOS 15.0+**
+- **Swift 5.0+**
