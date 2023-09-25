@@ -33,7 +33,12 @@ import QLChatFirebase
 
 // Initialize Firebase in your app delegate
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    // Initialize Firebase for your chat functionality
+    // Option 1: Using QLChatFirebase
     QLChatFirebase.initialize()
+
+    // Option 2: Using Firebase directly
+     FirebaseApp.initialize()
     return true
 }
 ```
