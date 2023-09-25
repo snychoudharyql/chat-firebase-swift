@@ -5,6 +5,7 @@
 //  Created by Abhishek Pandey on 13/09/23.
 //
 
+import Firebase
 import FirebaseFirestoreSwift
 import Foundation
 
@@ -15,6 +16,7 @@ public class ChatUser: Codable, ObservableObject {
     public var messageTitle: String?
     public var receiverName: String?
     public var lastMessage: String?
+    public var messageTimeStamp: Timestamp?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -23,6 +25,7 @@ public class ChatUser: Codable, ObservableObject {
         case messageTitle
         case receiverName
         case lastMessage = "last_message"
+        case messageTimeStamp = "time_stamp"
     }
 
     public init() {}

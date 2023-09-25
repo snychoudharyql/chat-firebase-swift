@@ -22,14 +22,16 @@ public class ChatViewModel: ObservableObject {
     let headerTitle: String
     let addGroupIcon: String
     let headerForegroundColor: Color
+    let headerTitleFont: Font
 
     // MARK: Initialization
 
-    public init(title: String, headerBackgroundColor: Color, iconName: String, headerForegroundColor: Color = .black) {
+    public init(title: String, headerBackgroundColor: Color, iconName: String, headerForegroundColor: Color = .black, headerTitleFont: Font) {
         self.headerBackgroundColor = headerBackgroundColor
         headerTitle = title
         addGroupIcon = iconName
         self.headerForegroundColor = headerForegroundColor
+        self.headerTitleFont = headerTitleFont
     }
 
     // MARK: Get Chat List

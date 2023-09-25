@@ -30,7 +30,7 @@ public struct ChatListView: View {
                     HStack(alignment: .center) {
                         Text(chatVM.headerTitle)
                             .foregroundColor(chatVM.headerForegroundColor)
-                            .font(.system(size: Size.thirtyFive))
+                            .font(chatVM.headerTitleFont)
                             .fontWeight(.bold)
                         Spacer()
                         Image(chatVM.addGroupIcon).resizable()
@@ -45,7 +45,7 @@ public struct ChatListView: View {
                 // MARK: Chat List
 
                 List(chatVM.chatList, id: \.id) { chat in
-                    MessageMember(chat: chat)
+                    MessageMemberView(chat: chat)
                         .onTapGesture {
                             delegate?.getMemberChat(chat: chat)
                         }

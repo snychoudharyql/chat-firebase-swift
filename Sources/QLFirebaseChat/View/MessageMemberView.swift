@@ -1,5 +1,5 @@
 //
-//  MessageMember.swift
+//  MessageMemberView.swift
 //  FirebaseChatExample
 //
 //  Created by Abhishek Pandey on 18/09/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct MessageMember: View {
+public struct MessageMemberView: View {
     // MARK: - Properties
 
     public var chat = ChatUser()
