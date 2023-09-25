@@ -39,7 +39,7 @@ public struct ChatListView: View {
                             .onTapGesture {
                                 delegate?.didTapButton()
                             }
-                    }
+                    }.padding(.horizontal, Size.ten)
                 }.frame(height: Size.hundred)
 
                 // MARK: Chat List
