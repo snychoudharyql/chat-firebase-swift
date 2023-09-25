@@ -16,5 +16,14 @@ public class ChatUser: Codable, ObservableObject {
     public var receiverName: String?
     public var lastMessage: String?
 
+    enum CodingKeys: String, CodingKey {
+        case id
+        case users
+        case groupName = "group_name"
+        case messageTitle
+        case receiverName
+        case lastMessage = "last_message"
+    }
+
     public init() {}
 }

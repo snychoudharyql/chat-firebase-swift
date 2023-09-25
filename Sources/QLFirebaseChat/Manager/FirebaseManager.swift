@@ -169,4 +169,19 @@ public class FirebaseManager {
                 }
             }
     }
+
+    // MARK: - Last Message Update
+
+    /// Save the last message send by the sender in messages collection with document id
+    public func lastMessageUpdate(with collection: CollectionType, data: [String: Any], documentID: String, message _: String, completion: @escaping (Bool?) -> Void) {
+        database.collection(collection.rawValue).document(documentID).updateData(data) { error in
+            if let error {
+                debugPrint("Error updating document: \(error)")
+                completion(false)
+            } else {
+                debugPrint("Document successfully updated.")
+                completion(true)
+            }
+        }
+    }
 }

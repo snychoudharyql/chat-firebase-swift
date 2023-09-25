@@ -35,45 +35,43 @@ public class ChatViewModel: ObservableObject {
     // MARK: Get Chat List
 
     public func getChatList() {
-        FirebaseManager.shared.fetchChatList(with: .messages) { fetchChatList in
-            if fetchChatList == nil {
-                self.chatList = []
-            } else {
-                if let snapshots = fetchChatList {
-                    var chatMemebers = [ChatUser]()
-                    let group = DispatchGroup()
+        FirebaseManager.shared.fetchChatList(with: .messages) { [weak self] fetchChatList in
+            guard let self else { return }
+
+            if let snapshots = fetchChatList {
+                var chatMembers = [ChatUser]()
+                let group = DispatchGroup()
+
+                for snapshot in snapshots {
                     group.enter()
-                    chatMemebers = snapshots.compactMap { queryDocumentSnapshot in
-                        do {
-                            let message = try queryDocumentSnapshot.data(as: ChatUser.self)
-                            return message
-                        } catch {
-                            return nil
-                        }
-                    }
-                    group.leave()
-                    for i in 0 ..< chatMemebers.count {
-                        group.enter()
-                        if chatMemebers[i].users?.count == 2 {
-                            chatMemebers[i].users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser(with: .UID) }
-                            if let firstUserID = chatMemebers[i].users?.first {
+
+                    if let message = try? snapshot.data(as: ChatUser.self) {
+                        chatMembers.append(message)
+
+                        if message.users?.count == 2 {
+                            message.users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser(with: .UID) }
+                            if let firstUserID = message.users?.first {
+                                group.enter()
                                 FirebaseManager.shared.getUserDetail(forUID: firstUserID, type: .UID) { name, _ in
                                     if let memberName = name {
-                                        chatMemebers[i].receiverName = memberName
+                                        message.receiverName = memberName
                                     }
                                     group.leave()
                                 }
                             }
                         } else {
-                            chatMemebers[i].receiverName = chatMemebers[i].groupName
-                            group.leave()
+                            message.receiverName = message.groupName
                         }
                     }
 
-                    group.notify(queue: .main) {
-                        self.chatList = chatMemebers
-                    }
+                    group.leave()
                 }
+
+                group.notify(queue: .main) {
+                    self.chatList = chatMembers
+                }
+            } else {
+                self.chatList = []
             }
         }
     }
