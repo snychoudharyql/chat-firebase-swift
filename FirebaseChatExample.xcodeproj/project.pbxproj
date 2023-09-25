@@ -113,16 +113,16 @@
 		8CE390DD2AB461340068AF14 /* FirebaseChatExample */ = {
 			isa = PBXGroup;
 			children = (
-				8C7BCE422AB8527000EB8161 /* GoogleService-Info.plist */,
+				8CE390EE2AB461BC0068AF14 /* Application */,
+				8CE390E22AB461360068AF14 /* Assets.xcassets */,
 				8C195EA62AB80D4C00EA267A /* Extensions */,
+				8C7BCE422AB8527000EB8161 /* GoogleService-Info.plist */,
 				8CE3910B2AB479450068AF14 /* Helper */,
 				8CE3910A2AB4793B0068AF14 /* Model */,
-				8CE391092AB479280068AF14 /* ViewModel */,
-				8CE390EE2AB461BC0068AF14 /* Application */,
-				8CE390ED2AB461A70068AF14 /* View */,
-				8CE390E22AB461360068AF14 /* Assets.xcassets */,
-				8CE390F82AB469830068AF14 /* UIComponents */,
 				8CE390E42AB461360068AF14 /* Preview Content */,
+				8CE390F82AB469830068AF14 /* UIComponents */,
+				8CE390ED2AB461A70068AF14 /* View */,
+				8CE391092AB479280068AF14 /* ViewModel */,
 			);
 			path = FirebaseChatExample;
 			sourceTree = "<group>";

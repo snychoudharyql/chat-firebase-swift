@@ -26,7 +26,7 @@ struct DashboardView: View {
         }
     }
     
-    @StateObject var chatViewModel = ChatViewModel(title: "Message", headerBackgroundColor: .blue, iconName: kAddGroup, headerForegroundColor: .white)
+    @StateObject var chatViewModel = ChatViewModel(title: "Message", headerBackgroundColor: .blue, iconName: kAddGroup, headerForegroundColor: .white, headerTitleFont: .system(size: 35))
     @State private var selectionType: SelectionType = .none
     
     // MARK: - Body

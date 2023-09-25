@@ -22,9 +22,9 @@ struct MessageInputField: View {
     var body: some View {
             HStack {
                 messageTextField
-                sendButton
+                sendButton.padding(.trailing, 20)
             }
-        .padding()
+            .padding(.vertical, 10)
         .background(Color("Gray"))
         .cornerRadius(50)
     }

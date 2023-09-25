@@ -18,10 +18,12 @@ struct CustomTextField: View {
             // If text is empty, show the placeholder on top of the TextField
             if text.isEmpty {
                 placeholder
+                    .padding(.leading, 4)
                     .opacity(0.5)
             }
             ExpandableTextView(text: $text)
                 .frame(minHeight: 40, maxHeight: 40)
+                .padding(.leading, 5)
                 //.background(.red)
             
         }.padding()

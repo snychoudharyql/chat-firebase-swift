@@ -17,26 +17,9 @@ let userStatus = "USER_STATUS"
 let kBackButton = "back"
 let kAddMember = "addMember"
 let kProfile = "profile"
-let kAddGroup = "add_icon"
-
-enum MessageType {
-    case initiated
-    case partial
-}
+let kAddGroup = "plus_icon"
 
 
-
-public enum Size {
-    static var twenty = 20.0
-    static var ten = 10.0
-    static var fifteen = 15.0
-    static var thirtyFive = 35.0
-    static var twentyFour = 24.0
-    static var fifty = 50.0
-    static var twentyTwo = 22.0
-}
-
-//let kProfile = "profile"
 let kMessages = "messages"
 let kUsers = "users"
 let kUID = "uid"
@@ -60,3 +43,20 @@ let buttonTitle =  {(isLogin: Bool) in
     
 }
 
+
+enum MessageType {
+    case initiated
+    case partial
+}
+
+
+
+public enum Size {
+    static var twenty = 20.0
+    static var ten = 10.0
+    static var fifteen = 15.0
+    static var thirtyFive = 35.0
+    static var twentyFour = 24.0
+    static var fifty = 50.0
+    static var twentyTwo = 22.0
+}

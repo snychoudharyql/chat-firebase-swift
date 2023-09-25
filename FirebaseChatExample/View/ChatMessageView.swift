@@ -32,8 +32,7 @@ struct ChatMessageView: View {
                     navigationHeader
                     headerContent(geometry: geometry)
                     messageList
-                    MessageInputField(messagesManager: userVM, documentID: chatID, receiverID: memberID)
-                        
+                    MessageInputField(messagesManager: userVM, documentID: chatID, receiverID: memberID).padding(.horizontal, 20)
                 }
             
             }
@@ -43,12 +42,13 @@ struct ChatMessageView: View {
         .navigationBarBackButtonHidden(true)
     }
     
+    /// Navigation header configuration
     private var navigationHeader: some View {
         VStack(alignment: .leading) {
             Button {
                 dismiss()
             } label: {
-                Image("back")
+                Image(kBackButton)
                     .resizable()
                     .frame(width: 25, height: 25)
             }
@@ -85,6 +85,7 @@ struct ChatMessageView: View {
         EmptyView()
     }
     
+    /// Message list display
     private var messageList: some View {
         ScrollViewReader { scrollView in
             List(userVM.messageList, id: \.id) { message in
@@ -93,17 +94,11 @@ struct ChatMessageView: View {
                     .id(message.id)
             }
             .listStyle(.plain)
-//            .onChange(of: userVM.messageList.count) { newValue in
-//                withAnimation {
-//                    scrollView.scrollTo(newValue, anchor: .bottom)
-//                }
-//            }
-            .onAppear {
-                if !userVM.messageList.isEmpty {
-                  //  scrollView.scrollTo(userVM.messageList.last?.id)
+            .onChange(of: userVM.messageList.count) { newValue in
+                withAnimation {
+                    scrollView.scrollTo(userVM.messageList.last?.id)
                 }
             }
-            
         }
     }
     
@@ -111,8 +106,4 @@ struct ChatMessageView: View {
 }
 
 
-//struct ChatMessageView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ChatMessageView()
-//    }
-//}
+
