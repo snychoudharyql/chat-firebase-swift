@@ -22,23 +22,21 @@ struct ChatMessageView: View {
         self.chatID = chatID
         self.memberName = memberName
         self.memberID = memberID
-       // _userVM = StateObject(wrappedValue: MessageViewModel()) // Initialize userVM as a StateObject
     }
     
     // MARK: - Body
     
     var body: some View {
         GeometryReader { geometry in
-            ZStack(alignment: .bottom) {
                 VStack {
                     navigationHeader
                     headerContent(geometry: geometry)
                     messageList
                     MessageInputField(messagesManager: userVM, documentID: chatID, receiverID: memberID)
+                        
                 }
             
             }
-        }
         .onAppear(perform: {
             userVM.messageList(documentID: chatID)
         })

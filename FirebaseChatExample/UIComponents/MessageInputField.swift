@@ -20,10 +20,10 @@ struct MessageInputField: View {
     // MARK: - Body
     
     var body: some View {
-        HStack {
-            messageTextField
-            sendButton
-        }
+            HStack {
+                messageTextField
+                sendButton
+            }
         .padding()
         .background(Color("Gray"))
         .cornerRadius(50)
@@ -74,3 +74,4 @@ struct MessageInputField: View {
         background(color)
     }
 }
+

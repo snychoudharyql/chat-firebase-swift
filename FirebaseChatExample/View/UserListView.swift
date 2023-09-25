@@ -56,9 +56,7 @@ struct UserListView: View {
             userVM.getUserList()
         }
         .navigationBarBackButtonHidden(true)
-       // if isSelectedUser {
             navigationLinkToChat
-       // }
     }
     
     // Header View
@@ -90,7 +88,19 @@ struct UserListView: View {
     }
     
     private var navigationLinkToChat: some View {
-        NavigationLink("", destination: chatDestination, isActive: $isSelectedUser)
+        NavigationLink(
+            "",
+            destination: chatDestination,
+            isActive: Binding(
+                get: { isSelectedUser },
+                set: { isActive in
+                    if !isActive {
+                        resetNavigation()
+                    }
+                }
+            )
+        )
+        .hidden()
     }
     
     private var chatDestination: some View {
@@ -213,4 +223,11 @@ extension UserListView {
             }
         }
     }
+    
+    private func resetNavigation() {
+        isSelectedUser = false
+        singleUser = User() // Reset the singleUser state
+        individualUser = [] // Reset the individualUser state
+    }
+
 }

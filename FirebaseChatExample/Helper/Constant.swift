@@ -50,3 +50,13 @@ public enum ChatList {
     static var addMemberImageName = "add_icon"
     static var headerBackgroundColor = Color.green
 }
+
+let bottomTitle =  {(isLogin: Bool) in
+    return isLogin ? "Create new account" : "Already have account?"
+    
+}
+let buttonTitle =  {(isLogin: Bool) in
+    return isLogin ? "Login" : "SignUp"
+    
+}
+

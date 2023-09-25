@@ -19,7 +19,7 @@ class MessageViewModel: ObservableObject {
     var collectionType = CollectionType.users
     @Published var messageList = [MessageModel]()
     
- 
+    
     // MARK: -  Initiate Chat
     
     func chatInitate(groupName: String, uIDs: [String], callback: @escaping(Bool) -> Void) {
@@ -63,9 +63,17 @@ class MessageViewModel: ObservableObject {
             if isSuccess {
                 debugPrint("createdMessage Successfully!!!")
                 self.messageList(documentID: documentID)
+                
+                let dataToUpdate: [String: Any] = [
+                    "last_message": text,
+                    "time_stamp": Timestamp(date: Date())
+                ]
+
+                FirebaseManager.shared.lastMessageUpdate(with: .messages, data: dataToUpdate, documentID: documentID, message: text) { isSuccess in
+                    
+                }
             }
         }
-        
     }
     
     func messageList(documentID: String) {
@@ -93,7 +101,7 @@ class MessageViewModel: ObservableObject {
         }
     }
     
-
+    
     // MARK: - GetUserList
     func getUserList() {
         ContactManager.shared.fetchContacts { fetchUser in
@@ -145,7 +153,6 @@ class MessageViewModel: ObservableObject {
                             FirebaseManager.shared.getUserDetail(forUID: firstUserID, type: .UID) { name, _ in
                                 if let memberName = name {
                                     chatMemebers[i].receiverName = memberName
-                                    
                                 }
                                 group.leave()
                             }
@@ -155,9 +162,7 @@ class MessageViewModel: ObservableObject {
                     group.notify(queue: .main) {
                         completion(chatMemebers) //chatMemebers
                     }
-                    
                 }
-                
             }
         }
     }

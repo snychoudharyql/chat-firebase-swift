@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct CustomTextField: View {
+    // MARK: - Properties
     var placeholder: Text
     @Binding var text: String
-    var editingChanged: (Bool)->() = { _ in }
-    var commit: ()->() = { }
-
+    
+    // MARK: - body
     var body: some View {
         ZStack(alignment: .leading) {
             // If text is empty, show the placeholder on top of the TextField
             if text.isEmpty {
                 placeholder
-                .opacity(0.5)
+                    .opacity(0.5)
             }
+            ExpandableTextView(text: $text)
+                .frame(minHeight: 40, maxHeight: 40)
+                //.background(.red)
             
-            TextField("", text: $text, axis: .vertical)
-                //.frame(maxHeight: 100)
-
         }.padding()
     }
 }
