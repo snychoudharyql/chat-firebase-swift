@@ -29,6 +29,7 @@ public struct ChatListView: View {
                     chatVM.headerBackgroundColor.edgesIgnoringSafeArea(.all)
                     HStack(alignment: .center) {
                         Text(chatVM.headerTitle)
+                            .foregroundColor(chatVM.headerForegroundColor)
                             .font(.system(size: Size.thirtyFive))
                             .fontWeight(.bold)
                         Spacer()
