@@ -39,22 +39,20 @@ public class FirebaseManager {
     // MARK: fetchUsers
 
     /// Fetch the user list from the user collection
-    public func fetchUsers(with collectionName: String, completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
+    public func fetchUsers(fromCollection collectionName: String, completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
         database.collection(collectionName).addSnapshotListener { querySnapshot, error in
             if let error {
                 debugPrint("Error fetching users: \(error.localizedDescription)")
+                completion(nil)
                 return
             }
-
-            if let documents = querySnapshot?.documents {
-                completion(documents)
-            }
+            completion(querySnapshot?.documents)
         }
     }
 
     // MARK: - fetchChatList
 
-    /// Fetch the all member message who is already done the chat
+    /// Fetch the all member message who had done chat with user
     public func fetchChatList(with collection: CollectionType, completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
         database.collection(collection.rawValue).whereField(kUsers, arrayContains: getCurrentUser(with: .UID)).addSnapshotListener { querySnapshot, error in
             if let error {
@@ -85,12 +83,12 @@ public class FirebaseManager {
 
     // MARK: - GetUserDetail
 
-    /// Get the user detail by UID
+    /// Get the any user detail with uid parameter
     public func getUserDetail(forUID uid: String, type: FieldType, completion: @escaping (String?, String?) -> Void) {
         let usersCollection = database.collection(kUsers)
         usersCollection.whereField(type.rawValue, isEqualTo: uid).getDocuments { querySnapshot, error in
             if let error {
-                print("Error getting user document: \(error.localizedDescription)")
+                debugPrint("Error getting user document: \(error.localizedDescription)")
                 completion(nil, nil)
             } else {
                 if let document = querySnapshot?.documents.first {

@@ -17,10 +17,12 @@ public class ChatUser: Codable, ObservableObject {
     public var receiverName: String?
     public var lastMessage: String?
     public var messageTimeStamp: Timestamp?
+    public var profile: String?
 
     enum CodingKeys: String, CodingKey {
         case id
         case users
+        case profile
         case groupName = "group_name"
         case messageTitle
         case receiverName
