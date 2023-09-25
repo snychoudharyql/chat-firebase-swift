@@ -12,6 +12,7 @@ public struct MessageMemberView: View {
 
     public var chat: ChatUser
     public var profileImagePlaceholder = kProfile
+    public var dateFormat = "MM/dd/yy hh:mm:a"
 
     // MARK: - Body
 
@@ -21,7 +22,7 @@ public struct MessageMemberView: View {
             userDetails
         }
         .padding(.vertical, Size.ten)
-        .padding(.horizontal, Size.twenty)
+        .padding(.horizontal, Size.ten)
     }
 
     /// Profile Image :  sender profile image
@@ -58,7 +59,7 @@ public struct MessageMemberView: View {
             if let timestamp = chat.messageTimeStamp {
                 HStack {
                     Spacer()
-                    Text(timestamp.formattedDateWithAMPM(with: "MMM dd, yyyy hh:mm a"))
+                    Text(timestamp.formattedDateWithAMPM(with: dateFormat))
                         .font(.caption)
                         .foregroundColor(.gray.opacity(0.7))
                 }
