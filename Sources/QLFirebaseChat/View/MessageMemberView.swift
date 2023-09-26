@@ -1,6 +1,5 @@
 //
 //  MessageMemberView.swift
-//  FirebaseChatExample
 //
 //  Created by Abhishek Pandey on 18/09/23.
 //

@@ -22,3 +22,8 @@ public enum FieldType: String {
     case groupName = "group_name"
     case name
 }
+
+public enum EditBoxSelectionType {
+    case send
+    case addMedia
+}

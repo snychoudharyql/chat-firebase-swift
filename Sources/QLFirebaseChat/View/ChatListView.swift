@@ -1,6 +1,5 @@
 //
 //  ChatListView.swift
-//  FirebaseChatExample
 //
 //  Created by Abhishek Pandey on 15/09/23.
 //

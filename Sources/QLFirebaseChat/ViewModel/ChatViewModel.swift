@@ -1,8 +1,7 @@
 //
 //  ChatViewModel.swift
-//  FirebaseChatExample
 //
-//  Created by Abhishek Pandey on 22/09/23.
+//  Created by Abhishek Pandey on 26/09/23.
 //
 
 import Firebase
