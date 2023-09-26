@@ -27,3 +27,8 @@ public enum EditBoxSelectionType {
     case send
     case addMedia
 }
+
+enum ContentType: String {
+    case image = "Images"
+    case video = "Videos"
+}

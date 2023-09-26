@@ -7,6 +7,7 @@
 
 import Firebase
 import FirebaseFirestore
+import FirebaseStorage
 import Foundation
 
 public class FirebaseManager {
@@ -179,6 +180,33 @@ public class FirebaseManager {
             } else {
                 debugPrint("Document successfully updated.")
                 completion(true)
+            }
+        }
+    }
+
+    // MARK: - uploadMediaToFirebaseStorage
+
+    func uploadMediaToFirebaseStorage(data: Data, contentType: ContentType, completion: @escaping (String?) -> Void) {
+        let storage = Storage.storage()
+        let storageRef = storage.reference()
+        let unixTimestampMilliseconds = Date().timeIntervalSince1970 * 1000
+        let mediaRef = storageRef.child("\(contentType.rawValue)/\(unixTimestampMilliseconds).jpeg")
+        let metadata = StorageMetadata()
+        metadata.contentType = contentType == .image ? "image/jpeg" : "video/mp4"
+        mediaRef.putData(data, metadata: metadata) { _, error in
+            if let error {
+                debugPrint("Error uploading media: \(error)")
+                completion(nil)
+            } else {
+                mediaRef.downloadURL { url, error in
+                    if let downloadURL = url {
+                        let urlString = downloadURL.absoluteString
+                        completion(urlString)
+                    } else {
+                        debugPrint("Error getting download URL: \(String(describing: error))")
+                        completion(nil)
+                    }
+                }
             }
         }
     }
