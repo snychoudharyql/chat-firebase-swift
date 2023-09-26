@@ -186,7 +186,7 @@ public class FirebaseManager {
 
     // MARK: - uploadMediaToFirebaseStorage
 
-    func uploadMediaToFirebaseStorage(data: Data, contentType: ContentType, completion: @escaping (String?) -> Void) {
+    public func uploadMediaToFirebaseStorage(data: Data, contentType: ContentType, completion: @escaping (String?) -> Void) {
         let storage = Storage.storage()
         let storageRef = storage.reference()
         let unixTimestampMilliseconds = Date().timeIntervalSince1970 * 1000
