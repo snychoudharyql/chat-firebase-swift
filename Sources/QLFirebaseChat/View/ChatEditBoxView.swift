@@ -10,20 +10,20 @@ import SwiftUI
 public struct ChatEditBoxView: View {
     // MARK: - Properties
 
-    @ObservedObject var chatEditVM: ChatEditVM
+    @StateObject var chatEditVM: ChatEditVM
     @Binding var text: String
-    @State var textLine = 1
+    @State var textViewHeight = Size.defaultTextViewHeight
     var callback: ((EditBoxSelectionType) -> Void)?
     @State var isActionSheetPresented = false
-    @State var isCameraOpen = false
+    @State var isCameraPresented = false
     @State private var selectedImage = [UIImage]()
-    @State private var isGallerySelected: Bool = false
+    @State private var isGalleryPresented: Bool = false
     @State public var pickerSelectionType: ImagePickerSelectType = .multiple
 
     // MARK: Initialization
 
     public init(chatEditVM: ChatEditVM, text: Binding<String>, imageSelectionType: ImagePickerSelectType, callback: ((EditBoxSelectionType) -> Void)?) {
-        self.chatEditVM = chatEditVM
+        _chatEditVM = StateObject(wrappedValue: chatEditVM)
         _text = text
         pickerSelectionType = imageSelectionType
         self.callback = callback
@@ -33,31 +33,41 @@ public struct ChatEditBoxView: View {
 
     public var body: some View {
         HStack {
-            addMediaButton
+            if chatEditVM.isNeedMediaShare {
+                addMediaButton
+            }
             editTextView
             sendButton
         }
+
+        /// isActionSheetPresented:  is used for to present action sheet
         .actionSheet(isPresented: $isActionSheetPresented, content: actionSheetContent)
         .padding(.horizontal, 10)
         .frame(width: UIScreen.main.bounds.width)
-        .sheet(isPresented: $isCameraOpen) {
-            ImagePicker(images: $selectedImage, sourceType: .camera) { _ in
+
+        /// isCameraOpen
+        .sheet(isPresented: $isCameraPresented) {
+            CFImagePicker(images: $selectedImage, sourceType: .camera) { _ in
             }
         }
-        .sheet(isPresented: $isGallerySelected) {
+
+        /// isGallerySelected:  is used to get the media from the gallery
+        .sheet(isPresented: $isGalleryPresented) {
             if pickerSelectionType == .single {
-                ImagePicker(images: $selectedImage, sourceType: .photoLibrary) { images in
+                CFImagePicker(images: $selectedImage, sourceType: .photoLibrary) { images in
                     callback?(.addMedia(images))
                     selectedImage = []
                 }
             } else if pickerSelectionType == .multiple {
-                PhotoPicker(selectedImages: $selectedImage, isPresented: $isGallerySelected) { images in
+                CFPhotoPicker(selectedImages: $selectedImage, isPresented: $isGalleryPresented) { images in
                     callback?(.addMedia(images))
                     selectedImage = []
                 }
             }
         }
     }
+
+    // MARK: Edit Text View
 
     private var editTextView: some View {
         ZStack(alignment: .leading) {
@@ -71,19 +81,18 @@ public struct ChatEditBoxView: View {
                 text: $text,
                 foregroundColor: chatEditVM.editFieldForegroundColor,
                 backgroundColor: chatEditVM.editFieldBackgroundColor,
-                lineNumberCallback: { line in
-                    textLine = line
+                textViewHeightCallback: { height in
+                    textViewHeight = height
                 }
             )
             .font(chatEditVM.editFieldFont)
-            .frame(width: Size.chatboxWidth, height: Double(textLine) * Size.forty)
-            .padding(.leading, 6)
-            .background(chatEditVM.editFieldBackgroundColor)
+            .frame(width: Size.chatboxWidth, height: Double(textViewHeight))
             .cornerRadius(Size.twenty)
         }
     }
 
-    // Send Button
+    // MARK: Send Button
+
     private var sendButton: some View {
         Button(action: sendMessage) {
             chatEditVM.sendButtonImage
@@ -94,7 +103,8 @@ public struct ChatEditBoxView: View {
         }
     }
 
-    // Add Media Button
+    // MARK: AddMediaButton
+
     private var addMediaButton: some View {
         Button(action: getMediaContent) {
             chatEditVM.addMediaButtonImage
@@ -104,10 +114,11 @@ public struct ChatEditBoxView: View {
         }
     }
 
-    // Send Message
+    // MARK: Send Message
+
     private func sendMessage() {
         callback?(.send)
-        textLine = 1
+        textViewHeight = Size.defaultTextViewHeight
     }
 
     // MARK: Open Action Sheet
@@ -124,11 +135,11 @@ public struct ChatEditBoxView: View {
             buttons: [
                 .default(
                     Text(kPhoto),
-                    action: { onOptionSelected(.camera) }
+                    action: { actionSheetSelected(with: .camera) }
                 ),
                 .default(
                     Text(kLibrary),
-                    action: { onOptionSelected(.gallery) }
+                    action: { actionSheetSelected(with: .gallery) }
                 ),
                 .cancel {
                     isActionSheetPresented = false
@@ -137,11 +148,11 @@ public struct ChatEditBoxView: View {
         )
     }
 
-    // MARK: onOptionSelected
+    // MARK: Action Sheet Callback
 
-    private func onOptionSelected(_ option: PhotoSourceType) {
-        isCameraOpen = option == .camera
-        isGallerySelected = option == .gallery
+    private func actionSheetSelected(with option: PhotoSourceType) {
+        isCameraPresented = option == .camera
+        isGalleryPresented = option == .gallery
         isActionSheetPresented = false
     }
 }

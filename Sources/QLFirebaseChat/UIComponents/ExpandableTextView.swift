@@ -12,7 +12,7 @@ struct ExpandableTextView: UIViewRepresentable {
     @Binding var text: String
     var foregroundColor = Color.black
     var backgroundColor = Color.clear
-    var lineNumberCallback: ((Int) -> Void)?
+    var textViewHeightCallback: ((Double) -> Void)?
 
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
@@ -21,10 +21,11 @@ struct ExpandableTextView: UIViewRepresentable {
         textView.backgroundColor = UIColor(backgroundColor)
         textView.textColor = UIColor(foregroundColor)
         textView.font = UIFont.systemFont(ofSize: 18)
-        textView.textContainerInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 8)
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 3, bottom: 10, right: 8)
         textView.textContainer.maximumNumberOfLines = .max
         textView.textContainer.lineBreakMode = .byWordWrapping
         textView.delegate = context.coordinator
+
         return textView
     }
 
@@ -54,9 +55,8 @@ struct ExpandableTextView: UIViewRepresentable {
 
             textView.isScrollEnabled = true
             if Int(numLines) >= maxLines {
-                parent.lineNumberCallback?(4)
             } else {
-                parent.lineNumberCallback?(numLines)
+                parent.textViewHeightCallback?(textView.contentSize.height)
             }
             parent.text = textView.text
         }

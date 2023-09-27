@@ -1,5 +1,5 @@
 //
-//  PhotoPicker.swift
+//  CFPhotoPicker.swift
 //  FirebaseChatExample
 //
 //  Created by Abhishek Pandey on 26/09/23.
@@ -8,7 +8,7 @@
 import PhotosUI
 import SwiftUI
 
-struct PhotoPicker: UIViewControllerRepresentable {
+struct CFPhotoPicker: UIViewControllerRepresentable {
     @Binding var selectedImages: [UIImage]
     @Binding var isPresented: Bool
     var onImagePicked: (([UIImage]) -> Void)?
@@ -32,9 +32,9 @@ struct PhotoPicker: UIViewControllerRepresentable {
     }
 
     class Coordinator: NSObject, PHPickerViewControllerDelegate {
-        let parent: PhotoPicker
+        let parent: CFPhotoPicker
 
-        init(_ parent: PhotoPicker) {
+        init(_ parent: CFPhotoPicker) {
             self.parent = parent
         }
 

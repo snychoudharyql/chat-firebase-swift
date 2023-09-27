@@ -1,5 +1,5 @@
 //
-//  ImagePicker.swift
+//  CFImagePicker.swift
 //  FireStoreProject
 //
 //  Created by Abhishek Pandey on 13/09/23.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-struct ImagePicker: UIViewControllerRepresentable {
+struct CFImagePicker: UIViewControllerRepresentable {
     @Binding var images: [UIImage]
     @Environment(\.presentationMode) private var presentationMode
     var sourceType: UIImagePickerController.SourceType
@@ -16,23 +16,23 @@ struct ImagePicker: UIViewControllerRepresentable {
     // Closure callback for multiple images
     var onImagePicked: (([UIImage]) -> Void)?
 
-    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
+    func makeUIViewController(context: UIViewControllerRepresentableContext<CFImagePicker>) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.sourceType = sourceType
         picker.delegate = context.coordinator
         return picker
     }
 
-    func updateUIViewController(_: UIImagePickerController, context _: UIViewControllerRepresentableContext<ImagePicker>) {}
+    func updateUIViewController(_: UIImagePickerController, context _: UIViewControllerRepresentableContext<CFImagePicker>) {}
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let parent: ImagePicker
+        let parent: CFImagePicker
 
-        init(_ parent: ImagePicker) {
+        init(_ parent: CFImagePicker) {
             self.parent = parent
         }
 

@@ -69,7 +69,7 @@ public class FirebaseManager {
 
     // MARK: createGroup
 
-    /// Initiate the chat in single user or group
+    /// Initiate the chat with single user or in group
     public func createGroup(with message: [String: Any], id: String, collection type: CollectionType, completion: @escaping (_ isSuccess: Bool) -> Void) {
         let usersCollection = database.collection(type.rawValue)
         let userDocument = usersCollection.document(id)

@@ -13,6 +13,7 @@ public enum Size {
     static var hundred = 100.0
     static var forty = 40.0
     static var chatboxWidth = 280.0
+    static var defaultTextViewHeight = 39.0
 }
 
 let kProfile = "profile"

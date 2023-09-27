@@ -9,7 +9,9 @@ import Foundation
 import SwiftUI
 
 public class ChatEditVM: ObservableObject {
-    @Published var isNeedMediaShare = false
+    // MARK: - Properties
+
+    @Published var isNeedMediaShare = true
 
     // UI Component configuration
     let sendButtonImage: Image
