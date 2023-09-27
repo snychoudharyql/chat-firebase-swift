@@ -22,9 +22,10 @@ public struct ChatEditBoxView: View {
 
     // MARK: Initialization
 
-    public init(chatEditVM: ChatEditVM, text: Binding<String>, callback: ((EditBoxSelectionType) -> Void)?) {
+    public init(chatEditVM: ChatEditVM, text: Binding<String>, imageSelectionType: ImagePickerSelectType, callback: ((EditBoxSelectionType) -> Void)?) {
         self.chatEditVM = chatEditVM
         _text = text
+        pickerSelectionType = imageSelectionType
         self.callback = callback
     }
 
