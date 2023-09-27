@@ -70,7 +70,7 @@ public struct ChatEditBoxView: View {
                 foregroundColor: chatEditVM.editFieldForegroundColor,
                 backgroundColor: chatEditVM.editFieldBackgroundColor,
                 lineNumberCallback: { line in
-                    textLine = line
+                    textLine = line == 0 ? 1 : line
                 }
             )
             .font(chatEditVM.editFieldFont)
