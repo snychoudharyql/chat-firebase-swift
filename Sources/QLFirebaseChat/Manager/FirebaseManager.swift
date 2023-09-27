@@ -70,10 +70,12 @@ public class FirebaseManager {
     // MARK: createGroup
 
     /// Initiate the chat with single user or in group
-    public func createGroup(with message: [String: Any], id: String, collection type: CollectionType, completion: @escaping (_ isSuccess: Bool) -> Void) {
+    public func createGroup(with message: [String: Any], collection type: CollectionType, completion: @escaping (_ isSuccess: Bool) -> Void) {
         let usersCollection = database.collection(type.rawValue)
-        let userDocument = usersCollection.document(id)
-        userDocument.setData(message) { err in
+        let randomDocumentID = usersCollection.document().documentID
+        var messageWithID = message
+        messageWithID["id"] = randomDocumentID
+        usersCollection.document(randomDocumentID).setData(messageWithID) { err in
             if err == nil {
                 completion(true)
             } else {
@@ -126,7 +128,11 @@ public class FirebaseManager {
     /// send messge to the receiver by sender
     public func sendMessage(with documentID: String, message: [String: Any], type: CollectionType, completion: @escaping (_ isSuccess: Bool) -> Void) {
         let parentDocumentReference = database.collection(kMessages).document(documentID)
-        parentDocumentReference.collection(type.rawValue).addDocument(data: message) { err in
+        let messageCollection = parentDocumentReference.collection(type.rawValue)
+        let randomDocumentID = messageCollection.document().documentID
+        var messageWithID = message
+        messageWithID["id"] = randomDocumentID
+        messageCollection.addDocument(data: message) { err in
             if err == nil {
                 completion(true)
             } else {

@@ -27,7 +27,7 @@ public class ChatUser: Codable, ObservableObject {
         case messageTitle
         case receiverName
         case lastMessage = "last_message"
-        case messageTimeStamp = "time_stamp"
+        case messageTimeStamp = "created_at"
     }
 
     public init() {}
