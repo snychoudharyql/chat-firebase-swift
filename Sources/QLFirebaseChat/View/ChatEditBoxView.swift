@@ -45,9 +45,11 @@ public struct ChatEditBoxView: View {
         .padding(.horizontal, 10)
         .frame(width: UIScreen.main.bounds.width)
 
-        /// isCameraOpen
+        /// isCameraOpen : is used to get teh images from the camera
         .sheet(isPresented: $isCameraPresented) {
-            CFImagePicker(images: $selectedImage, sourceType: .camera) { _ in
+            CFImagePicker(images: $selectedImage, sourceType: .camera) { images in
+                callback?(.addMedia(images))
+                selectedImage = []
             }
         }
 
