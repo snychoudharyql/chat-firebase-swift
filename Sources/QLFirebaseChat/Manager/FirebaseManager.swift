@@ -70,16 +70,16 @@ public class FirebaseManager {
     // MARK: createGroup
 
     /// Initiate the chat with single user or in group
-    public func createGroup(with message: [String: Any], collection type: CollectionType, completion: @escaping (_ isSuccess: Bool) -> Void) {
+    public func createGroup(with message: [String: Any], collection type: CollectionType, completion: @escaping (_ isSuccess: Bool, String) -> Void) {
         let usersCollection = database.collection(type.rawValue)
         let randomDocumentID = usersCollection.document().documentID
         var messageWithID = message
         messageWithID["id"] = randomDocumentID
         usersCollection.document(randomDocumentID).setData(messageWithID) { err in
             if err == nil {
-                completion(true)
+                completion(true, randomDocumentID)
             } else {
-                completion(false)
+                completion(false, randomDocumentID)
             }
         }
     }
