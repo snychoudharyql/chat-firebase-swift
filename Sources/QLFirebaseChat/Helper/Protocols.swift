@@ -9,5 +9,5 @@ import Foundation
 
 public protocol ChatListDelegate {
     func didTapButton()
-    func getMemberChat(chat: ChatUser)
+    func getChat(chat: ChatUser)
 }

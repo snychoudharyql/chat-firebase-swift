@@ -11,6 +11,8 @@ public enum Size {
     static var fifty = 50.0
     static var twentyTwo = 22.0
     static var hundred = 100.0
+    static var forty = 40.0
+    static var chatboxWidth = 280.0
 }
 
 let kProfile = "profile"
@@ -21,3 +23,8 @@ let kMessage = "message"
 let kSendTime = "send_time"
 let kName = "name"
 let kEmail = "email"
+
+let kLibrary = "Choose from Library"
+let kPhoto = "Take Photo"
+let kActionSheetTitle = "Select a Photo"
+let kImagePlaceHolder = "image_placeholder"

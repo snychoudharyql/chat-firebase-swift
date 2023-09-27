@@ -18,6 +18,7 @@ public struct ChatEditBoxView: View {
     @State var isCameraOpen = false
     @State private var selectedImage = [UIImage]()
     @State private var isGallerySelected: Bool = false
+    @State public var pickerSelectionType: ImagePickerSelectType = .multiple
 
     // MARK: Initialization
 
@@ -43,8 +44,14 @@ public struct ChatEditBoxView: View {
             }
         }
         .sheet(isPresented: $isGallerySelected) {
-            ImagePicker(images: $selectedImage, sourceType: .photoLibrary) { images in
-                callback?(.addMedia(images))
+            if pickerSelectionType == .single {
+                ImagePicker(images: $selectedImage, sourceType: .photoLibrary) { images in
+                    callback?(.addMedia(images))
+                }
+            } else if pickerSelectionType == .multiple {
+                PhotoPicker(selectedImages: $selectedImage, isPresented: $isGallerySelected) { images in
+                    callback?(.addMedia(images))
+                }
             }
         }
     }
@@ -66,7 +73,7 @@ public struct ChatEditBoxView: View {
                 }
             )
             .font(chatEditVM.editFieldFont)
-            .frame(width: 280, height: CGFloat(textLine * 40))
+            .frame(width: Size.chatboxWidth, height: Double(textLine) * Size.forty)
             .padding(.leading, 6)
             .background(chatEditVM.editFieldBackgroundColor)
             .cornerRadius(Size.twenty)
@@ -89,8 +96,8 @@ public struct ChatEditBoxView: View {
         Button(action: getMediaContent) {
             chatEditVM.addMediaButtonImage
                 .resizable()
-                .frame(width: 20, height: 20)
-                .padding(10)
+                .frame(width: Size.twenty, height: Size.twenty)
+                .padding(Size.ten)
         }
     }
 
@@ -109,14 +116,14 @@ public struct ChatEditBoxView: View {
 
     private func actionSheetContent() -> ActionSheet {
         ActionSheet(
-            title: Text("Select a Photo"),
+            title: Text(kActionSheetTitle),
             buttons: [
                 .default(
-                    Text("Take Photo"),
+                    Text(kPhoto),
                     action: { onOptionSelected(.camera) }
                 ),
                 .default(
-                    Text("Choose from Library"),
+                    Text(kLibrary),
                     action: { onOptionSelected(.gallery) }
                 ),
                 .cancel {

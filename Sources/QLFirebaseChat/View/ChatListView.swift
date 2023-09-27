@@ -46,7 +46,7 @@ public struct ChatListView: View {
                 List(chatVM.chatList, id: \.id) { chat in
                     MessageMemberView(chat: chat)
                         .onTapGesture {
-                            delegate?.getMemberChat(chat: chat)
+                            delegate?.getChat(chat: chat)
                         }
                 }
                 .listStyle(.plain)

@@ -1,7 +1,8 @@
 //
 //  ExpandableTextView.swift
+//  FirebaseChatExample
 //
-//  Created by Abhishek Pandey on 26/09/23.
+//  Created by Abhishek Pandey on 25/09/23.
 //
 
 import SwiftUI
@@ -19,10 +20,10 @@ struct ExpandableTextView: UIViewRepresentable {
         textView.isEditable = true
         textView.backgroundColor = UIColor(backgroundColor)
         textView.textColor = UIColor(foregroundColor)
-        textView.font = UIFont.systemFont(ofSize: 16)
+        textView.font = UIFont.systemFont(ofSize: 18)
         textView.textContainerInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 8)
-        // textView.textContainer.maximumNumberOfLines = 10
-        // textView.textContainer.lineBreakMode = .byTruncatingTail
+        textView.textContainer.maximumNumberOfLines = .max
+        textView.textContainer.lineBreakMode = .byWordWrapping
         textView.delegate = context.coordinator
         return textView
     }
@@ -43,28 +44,21 @@ struct ExpandableTextView: UIViewRepresentable {
         }
 
         func textViewDidChange(_ textView: UITextView) {
-            parent.text = textView.text
-            expandTextView(textView)
+            expandTextView(textView: textView)
+            // expandTextView(textView)
         }
 
-        private func expandTextView(_ textView: UITextView) {
+        func expandTextView(textView: UITextView) {
             let maxLines = 5
+            let numLines = textView.numberOfLines()
 
-            let numberOfLines = textView.contentSize.height / textView.font!.lineHeight
-
-            if Int(numberOfLines) >= maxLines {
-                textView.isScrollEnabled = true
+            textView.isScrollEnabled = true
+            if Int(numLines) >= maxLines {
+                parent.lineNumberCallback?(4)
             } else {
-                textView.isScrollEnabled = false
-                // textView.contentOffset = .zero
+                parent.lineNumberCallback?(numLines)
             }
-
-            let textArray = textView.text.components(separatedBy: "\n")
-            if numberOfLines <= 5 {
-                if let lineNumberCallback = parent.lineNumberCallback {
-                    lineNumberCallback(Int(textArray.isEmpty ? 1 : textArray.count))
-                }
-            }
+            parent.text = textView.text
         }
     }
 }

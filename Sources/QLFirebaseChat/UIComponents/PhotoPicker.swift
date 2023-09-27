@@ -5,14 +5,13 @@
 //  Created by Abhishek Pandey on 26/09/23.
 //
 
-import Photos
 import PhotosUI
 import SwiftUI
-import UIKit
 
 struct PhotoPicker: UIViewControllerRepresentable {
     @Binding var selectedImages: [UIImage]
     @Binding var isPresented: Bool
+    var onImagePicked: (([UIImage]) -> Void)?
 
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var configuration = PHPickerConfiguration()
@@ -40,18 +39,22 @@ struct PhotoPicker: UIViewControllerRepresentable {
         }
 
         func picker(_: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            let group = DispatchGroup()
             for result in results {
-                if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
-                    result.itemProvider.loadObject(ofClass: UIImage.self) { image, _ in
-                        if let image = image as? UIImage {
-                            DispatchQueue.main.async {
-                                self.parent.selectedImages.append(image)
-                            }
-                        }
+                group.enter()
+                result.itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+                    if let error {
+                        print("Error loading image: \(error.localizedDescription)")
+                    } else if let image = image as? UIImage {
+                        self.parent.selectedImages.append(image)
                     }
+                    group.leave()
                 }
             }
-            parent.isPresented = false
+            group.notify(queue: .main) {
+                self.parent.onImagePicked?(self.parent.selectedImages)
+                self.parent.isPresented = false
+            }
         }
     }
 }

@@ -43,3 +43,10 @@ public enum PhotoSourceType {
     case camera
     case gallery
 }
+
+/// ImagePickerSelectType : Check image selection type
+public enum ImagePickerSelectType {
+    case single
+    case multiple
+    case none
+}
