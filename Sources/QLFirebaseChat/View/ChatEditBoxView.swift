@@ -48,10 +48,12 @@ public struct ChatEditBoxView: View {
             if pickerSelectionType == .single {
                 ImagePicker(images: $selectedImage, sourceType: .photoLibrary) { images in
                     callback?(.addMedia(images))
+                    selectedImage = []
                 }
             } else if pickerSelectionType == .multiple {
                 PhotoPicker(selectedImages: $selectedImage, isPresented: $isGallerySelected) { images in
                     callback?(.addMedia(images))
+                    selectedImage = []
                 }
             }
         }
@@ -70,7 +72,7 @@ public struct ChatEditBoxView: View {
                 foregroundColor: chatEditVM.editFieldForegroundColor,
                 backgroundColor: chatEditVM.editFieldBackgroundColor,
                 lineNumberCallback: { line in
-                    textLine = line == 0 ? 1 : line
+                    textLine = line
                 }
             )
             .font(chatEditVM.editFieldFont)
@@ -105,6 +107,7 @@ public struct ChatEditBoxView: View {
     // Send Message
     private func sendMessage() {
         callback?(.send)
+        textLine = 1
     }
 
     // MARK: Open Action Sheet

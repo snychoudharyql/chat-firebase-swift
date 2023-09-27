@@ -39,6 +39,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
         }
 
         func picker(_: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            parent.selectedImages = []
             let group = DispatchGroup()
             for result in results {
                 group.enter()

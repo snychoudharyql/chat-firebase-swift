@@ -37,6 +37,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
 
         func imagePickerController(_: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            parent.images = []
             if let uiImage = info[.originalImage] as? UIImage {
                 parent.images.append(uiImage)
                 // Check if the callback is provided and pass the images

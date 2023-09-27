@@ -22,6 +22,6 @@ extension UITextView {
             numberOfLines += 1
         }
 
-        return numberOfLines
+        return numberOfLines == 0 ? 1 : numberOfLines
     }
 }
