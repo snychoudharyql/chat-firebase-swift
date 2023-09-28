@@ -12,12 +12,14 @@ public struct ChatListView: View {
 
     public var delegate: ChatListDelegate?
     @ObservedObject public var chatVM: ChatViewModel
+    public var headerHeight: CGFloat
 
     // MARK: - Public initializer
 
-    public init(delegate: ChatListDelegate? = nil, chatViewModel: ChatViewModel) {
+    public init(delegate: ChatListDelegate? = nil, chatViewModel: ChatViewModel, headerHeight: CGFloat) {
         self.delegate = delegate
         chatVM = chatViewModel
+        self.headerHeight = headerHeight
     }
 
     // MARK: - Body
@@ -40,7 +42,7 @@ public struct ChatListView: View {
                                 delegate?.didTapButton()
                             }
                     }.padding(.horizontal, Size.ten)
-                }.frame(height: Size.hundred)
+                }.frame(height: headerHeight)
 
                 // MARK: Chat List
 
