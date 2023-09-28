@@ -8,7 +8,7 @@
 import Foundation
 import QLFirebaseChat
 import Firebase
-
+import UIKit
 
 class MessageViewModel: ObservableObject {
     // MARK: - Properties
@@ -26,51 +26,49 @@ class MessageViewModel: ObservableObject {
         var chat = [String: Any]()
         chat["users"] = uIDs
         chat["group_name"] = groupName
-        chat["id"]  = UUID().uuidString
-        chat["time_stamp"] = Timestamp(date: Date())
-        FirebaseManager.shared.createGroup(with: chat, id: chat["id"] as! String, collection: .messages) { isSuccess in
+        chat["created_by"]  = FirebaseManager.shared.getCurrentUser(with: .UID)
+        chat["created_at"] = Timestamp(date: Date())
+        FirebaseManager.shared.createGroup(with: chat, collection: .messages) { isSuccess, _ in
             callback(true)
         }
+        
     }
     
     // MARK: - chatInitiateWithMessage
-    func chatInitiateWithMessage(uIDs: [String], text: String) {
+    
+    func chatInitiateWithMessage(uIDs: [String], text: String, mediaList: [String] = []) {
         var chat = [String: Any]()
         chat["users"] = uIDs
         chat["group_name"] = ""
-        chat["id"] = UUID().uuidString
-        chat["time_stamp"] = Timestamp(date: Date())
-        if let documentID = chat["id"] as? String {
-            FirebaseManager.shared.createGroup(with: chat, id: documentID, collection: .messages) { isSuccess in
+        chat["created_by"]  = FirebaseManager.shared.getCurrentUser(with: .UID)
+        chat["created_at"] = Timestamp(date: Date())
+            FirebaseManager.shared.createGroup(with: chat, collection: .messages) { isSuccess, document in
                 if isSuccess {
                     
-                    self.message(text: text, documentID: documentID)
-                    self.initiatedDocumentID = documentID
+                    self.message(text: text, documentID: document, mediaList: mediaList)
+                    self.initiatedDocumentID = document
                 }
                 
             }
-        }
     }
     
     // MARK: - Chat message
     
-    func message(text: String, documentID: String) {
+    func message(text: String, documentID: String, mediaList: [String] = []) {
         var message = [String: Any]()
         message["text"] = text
         message["sender_id"]  = FirebaseManager.shared.getCurrentUser(with: .UID)
         message["send_time"] = Timestamp(date: Date())
+        message["urls"] = mediaList
         FirebaseManager.shared.sendMessage(with: documentID, message: message, type: .message) { isSuccess in
             if isSuccess {
-                debugPrint("createdMessage Successfully!!!")
                 self.messageList(documentID: documentID)
-                
                 let dataToUpdate: [String: Any] = [
                     "last_message": text,
-                    "time_stamp": Timestamp(date: Date())
+                    "created_at": Timestamp(date: Date())
                 ]
-
+                
                 FirebaseManager.shared.lastMessageUpdate(with: .messages, data: dataToUpdate, documentID: documentID, message: text) { isSuccess in
-                    
                 }
             }
         }
@@ -165,5 +163,36 @@ class MessageViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    // MARK: - Send Media
+    
+    /// Send Media :  for send the media( such as images or videos) to the receiver end
+    func sendMedia(images: [UIImage], documentID: String, contentType: ContentType) {
+        var imageURLs = [String]()
+        let group = DispatchGroup()
+        for image in images {
+            
+            group.enter()
+            FirebaseManager.shared.uploadMediaToFirebaseStorage(data: image.jpegData(compressionQuality: 0.7)!, contentType: contentType) { fetchPath in
+                if let url = fetchPath {
+                    imageURLs.append(url)
+                } else {
+                    debugPrint("Unable to fetch url path from firebase storage")
+                }
+                group.leave()
+                
+               
+            }
+        }
+        
+        group.notify(queue: .main) {
+            if !imageURLs.isEmpty {
+                self.message(text: "", documentID: documentID, mediaList: imageURLs)
+            } else {
+                debugPrint("Unable to fetch images path")
+            }
+        }
+        
     }
 }

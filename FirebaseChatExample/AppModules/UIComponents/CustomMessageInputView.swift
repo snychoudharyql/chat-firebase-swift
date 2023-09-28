@@ -9,47 +9,38 @@ import SwiftUI
 import QLFirebaseChat
 
 
-struct MessageInputField: View {
+struct CustomMessageInputView: View {
     
     // MARK: - Properties
     @StateObject var messagesManager: MessageViewModel
     @State private var message = ""
-     var documentID = ""
+    var documentID = ""
     var receiverID = ""
+    @State var textLine = 1
+    var chatVM = ChatEditBoxVM(isNeedMediaShare: true, sendButtonImage: Image(systemName: "paperplane.fill"), addMediaButtonImage: Image("add_icon"), emptyFieldPlaceholder: "Enter the message", editFieldBackgroundColor: Color(Colors.peach).opacity(0.3), editFieldForegroundColor: .black, editFieldFont: Font.system(size: 15))
     
     // MARK: - Body
     
     var body: some View {
-            HStack {
-                messageTextField
-                sendButton.padding(.trailing, 20)
+        VStack(alignment: .center) {
+            ChatEditBoxView(chatEditVM: chatVM, text: $message, imageSelectionType: .single) { type in
+                switch type {
+                case .addMedia(let images):
+                    messagesManager.sendMedia(images: images, documentID: documentID, contentType: .image)
+                case .send:
+                    sendMessage()
+                    
+                }
             }
-            .padding(.vertical, 10)
-        .background(Color("Gray"))
-        .cornerRadius(50)
-    }
-    
-    private var messageTextField: some View {
-        CustomTextField(placeholder: Text("Enter your message here"), text: $message)
-            .disableAutocorrection(true)
-    }
-    
-    private var sendButton: some View {
-        Button {
-            if !message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                sendMessage()
-            }
-        } label: {
-            Image(systemName: "paperplane.fill")
-                .foregroundColor(.white)
-                .padding(10)
-                .background( message.isEmpty ? Color("Peach") : .pink)
-                .cornerRadius(50)
         }
-
     }
     
+    // MARK: Send Message
     private func sendMessage() {
+        guard !message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return
+        }
+        
         if !documentID.isEmpty {
             messagesManager.message(text: message, documentID: documentID)
         } else if !messagesManager.initiatedDocumentID.isEmpty {
@@ -67,11 +58,4 @@ struct MessageInputField: View {
         self.documentID = documentID
         self.receiverID = receiverID
     }
-    
-    // MARK: - View Modifier
-    
-    func backgroundStyle(_ color: Color) -> some View {
-        background(color)
-    }
 }
-

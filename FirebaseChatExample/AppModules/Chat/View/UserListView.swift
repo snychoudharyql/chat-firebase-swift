@@ -59,7 +59,9 @@ struct UserListView: View {
             navigationLinkToChat
     }
     
-    // Header View
+    // MARK: - UI Component Helpers
+    
+    // MARK: Navigation Header
     private var navigationHeader: some View {
         HStack {
             Button {
@@ -69,7 +71,7 @@ struct UserListView: View {
                     .resizable()
                     .frame(width: 26, height: 24)
             }
-            Text("User List")
+            Text(kUserTitle)
                 .font(.title)
             Spacer()
             toggleMultiSelectionButton
@@ -77,16 +79,17 @@ struct UserListView: View {
         .padding(.top, 24)
     }
     
-    // Create group button configuration
+    // MARK: Toggle MultiSelection Button
     private var toggleMultiSelectionButton: some View {
         Button(action: {
             isMultiSelectionActive.toggle()
             selectedUsers = []
         }) {
-            Text(isMultiSelectionActive ? "Remove" : "Create Group Chat")
+            Text(groupButtonTittle(isMultiSelectionActive))
         }
     }
     
+    // MARK: Navigation Link To Chat
     private var navigationLinkToChat: some View {
         NavigationLink(
             "",
@@ -103,6 +106,7 @@ struct UserListView: View {
         .hidden()
     }
     
+    // MARK: ChatDestination
     private var chatDestination: some View {
         Group {
             if individualUser.isEmpty {
@@ -119,6 +123,7 @@ struct UserListView: View {
         
     }
     
+    // MARK: Group Chat Button
     private var groupChatButton: some View {
         Group {
             if !selectedUsers.isEmpty {
@@ -145,7 +150,6 @@ struct UserListView_Previews: PreviewProvider {
 
 
 extension UserListView  {
-    
     @ViewBuilder
     func ContactUser(chatUser: User, isSelect: Bool) -> some View {
         HStack {
@@ -164,7 +168,7 @@ extension UserListView  {
                 Button {
                     /// code :  for to send a invitation
                 } label: {
-                    Text("Invite")
+                    Text(kInvite)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
                     

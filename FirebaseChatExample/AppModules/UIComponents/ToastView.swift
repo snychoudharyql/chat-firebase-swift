@@ -43,6 +43,6 @@ struct ToastView: View {
 
 struct ToastView_Previews: PreviewProvider {
     static var previews: some View {
-        ToastView(isPresented: .constant(true), message: "Hellorfmbfkjwerkgejrhfhsdvhvsdhjfvvfdhjvsdfhjvhjsdvfjvhsjdfvjhsdvjhfvshjvf")
+        ToastView(isPresented: .constant(true), message: "")
     }
 }

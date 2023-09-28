@@ -27,6 +27,12 @@ let kMessage = "message"
 let kSendTime = "send_time"
 let kName = "name"
 let kEmail = "email"
+let kInvite = "Invite"
+let kUserTitle = "User List"
+let kLibrary = "Choose from Library"
+let kPhoto = "Take Photo"
+let kActionSheetTitle = "Select a Photo"
+let kImagePlaceHolder = "image_placeholder"
 
 public enum ChatList {
     static var heading = "Message"
@@ -38,11 +44,15 @@ let bottomTitle =  {(isLogin: Bool) in
     return isLogin ? "Create new account" : "Already have account?"
     
 }
+
 let buttonTitle =  {(isLogin: Bool) in
     return isLogin ? "Login" : "SignUp"
     
 }
 
+let groupButtonTittle = {(isMemberSelected: Bool) in
+    return isMemberSelected ? "Remove" : "Create Group Chat"
+}
 
 enum MessageType {
     case initiated
@@ -59,4 +69,22 @@ public enum Size {
     static var twentyFour = 24.0
     static var fifty = 50.0
     static var twentyTwo = 22.0
+    static var forty = 40.0
+    static var chatboxWidth = 280.0
+}
+
+public enum EditBoxSelectionType {
+    case send
+    case addMedia([UIImage])
+}
+
+enum PhotoSourceType {
+    case camera
+    case gallery
+}
+
+public enum ImagePickerSelectType {
+    case single
+    case multiple
+    case none
 }

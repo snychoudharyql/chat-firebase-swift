@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct LoginView: View {
+    
+    // MARK: - Properties
+    
     @StateObject var user = UserViewModel()
     @State var isLogin = true
 
+    // MARK: - Body
+    
     var body: some View {
         ZStack {
             backgroundGradient
@@ -21,6 +26,8 @@ struct LoginView: View {
         }
     }
 
+    // MARK: - Background Gradient
+    
     private var backgroundGradient: some View {
         LinearGradient(
             gradient: Gradient(colors: [Color.purple, Color.blue.opacity(0.6)]),
@@ -37,11 +44,16 @@ struct LoginView: View {
                 .foregroundColor(.white)
                 .fontWeight(.bold)
                 .font(.system(size: 30))
-            
-            inputFields
-            
-            bottomFooter(isLogin: isLogin)
-                .padding(.vertical, 20)
+            VStack {
+                inputFields.padding(.top, 10)
+                bottomFooter(isLogin: isLogin)
+                    .padding(.vertical, 20)
+            }.background (
+                Rectangle()
+                    .foregroundColor(.white)
+                    .cornerRadius(36, corners: [.allCorners])
+                    .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
+            )
             
             Spacer()
         }
