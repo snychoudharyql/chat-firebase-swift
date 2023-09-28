@@ -19,6 +19,19 @@ public struct ChatNavigationHeaderView: View {
     public let backgroundColor: Color
     public let dismiss: () -> Void
 
+    // MARK: - Public initializer
+
+    public init(title: String, backButtonImage: Image, profileImage: String, profilePlaceholderImage: String, headerHeight: CGFloat, titleForegroundColor: Color, backgroundColor: Color, dismiss: @escaping () -> Void) {
+        self.title = title
+        self.backButtonImage = backButtonImage
+        self.profileImage = profileImage
+        self.profilePlaceholderImage = profilePlaceholderImage
+        self.headerHeight = headerHeight
+        self.titleForegroundColor = titleForegroundColor
+        self.backgroundColor = backgroundColor
+        self.dismiss = dismiss
+    }
+
     // MARK: - Body
 
     public var body: some View {
