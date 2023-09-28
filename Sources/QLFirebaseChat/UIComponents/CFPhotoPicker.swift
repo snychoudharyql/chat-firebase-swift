@@ -1,6 +1,6 @@
 //
 //  CFPhotoPicker.swift
-//  FirebaseChatExample
+//  QLFirebaseChat
 //
 //  Created by Abhishek Pandey on 26/09/23.
 //

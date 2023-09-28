@@ -132,7 +132,7 @@ public class FirebaseManager {
         let randomDocumentID = messageCollection.document().documentID
         var messageWithID = message
         messageWithID["id"] = randomDocumentID
-        messageCollection.addDocument(data: message) { err in
+        messageCollection.addDocument(data: messageWithID) { err in
             if err == nil {
                 completion(true)
             } else {

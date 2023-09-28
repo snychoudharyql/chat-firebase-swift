@@ -1,6 +1,6 @@
 //
 //  ChatEditBoxView.swift
-//  FirebaseChatExample
+//  QLFirebaseChat
 //
 //  Created by Abhishek Pandey on 18/09/23.
 //

@@ -1,6 +1,6 @@
 //
 //  ExpandableTextView.swift
-//  FirebaseChatExample
+//  QLFirebaseChat
 //
 //  Created by Abhishek Pandey on 25/09/23.
 //
