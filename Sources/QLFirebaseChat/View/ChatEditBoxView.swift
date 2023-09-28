@@ -10,7 +10,7 @@ import SwiftUI
 public struct ChatEditBoxView: View {
     // MARK: - Properties
 
-    @StateObject var chatEditVM: ChatEditVM
+    @StateObject var chatEditVM: ChatEditBoxVM
     @Binding var text: String
     @State var textViewHeight = Size.defaultTextViewHeight
     var callback: ((EditBoxSelectionType) -> Void)?
@@ -22,7 +22,7 @@ public struct ChatEditBoxView: View {
 
     // MARK: Initialization
 
-    public init(chatEditVM: ChatEditVM, text: Binding<String>, imageSelectionType: ImagePickerSelectType, callback: ((EditBoxSelectionType) -> Void)?) {
+    public init(chatEditVM: ChatEditBoxVM, text: Binding<String>, imageSelectionType: ImagePickerSelectType, callback: ((EditBoxSelectionType) -> Void)?) {
         _chatEditVM = StateObject(wrappedValue: chatEditVM)
         _text = text
         pickerSelectionType = imageSelectionType
@@ -32,18 +32,34 @@ public struct ChatEditBoxView: View {
     // MARK: Body
 
     public var body: some View {
-        HStack {
-            if chatEditVM.isNeedMediaShare {
-                addMediaButton
+        ZStack {
+            HStack {
+                if chatEditVM.isNeedMediaShare {
+                    addMediaButton
+                }
+                editTextView
+                sendButton
             }
-            editTextView
-            sendButton
-        }
 
-        /// isActionSheetPresented:  is used for to present action sheet
-        .actionSheet(isPresented: $isActionSheetPresented, content: actionSheetContent)
-        .padding(.horizontal, 10)
-        .frame(width: UIScreen.main.bounds.width)
+            /// isActionSheetPresented:  is used for to present action sheet
+            if isActionSheetPresented {
+                ActionSheetView { result in
+                    if let result {
+                        if result == 0 {
+                            // open camera
+                            actionSheetSelected(with: .camera)
+                        } else if result == 1 {
+                            // open photo library
+                            actionSheetSelected(with: .gallery)
+                        }
+                    }
+                    withAnimation {
+                        isActionSheetPresented = false
+                    }
+                }.background(.black.opacity(0.2))
+                    .transition(.opacity)
+            }
+        }
 
         /// isCameraOpen : is used to get teh images from the camera
         .sheet(isPresented: $isCameraPresented) {
@@ -126,28 +142,9 @@ public struct ChatEditBoxView: View {
     // MARK: Open Action Sheet
 
     private func getMediaContent() {
-        isActionSheetPresented = true
-    }
-
-    // MARK: Action Sheet Configuration
-
-    private func actionSheetContent() -> ActionSheet {
-        ActionSheet(
-            title: Text(kActionSheetTitle),
-            buttons: [
-                .default(
-                    Text(kPhoto),
-                    action: { actionSheetSelected(with: .camera) }
-                ),
-                .default(
-                    Text(kLibrary),
-                    action: { actionSheetSelected(with: .gallery) }
-                ),
-                .cancel {
-                    isActionSheetPresented = false
-                },
-            ]
-        )
+        withAnimation {
+            isActionSheetPresented = true
+        }
     }
 
     // MARK: Action Sheet Callback
@@ -155,6 +152,21 @@ public struct ChatEditBoxView: View {
     private func actionSheetSelected(with option: PhotoSourceType) {
         isCameraPresented = option == .camera
         isGalleryPresented = option == .gallery
-        isActionSheetPresented = false
+        withAnimation {
+            isActionSheetPresented = false
+        }
+    }
+}
+
+struct ChatEditBoxView_Previews: PreviewProvider {
+    static var previews: some View {
+        ChatEditBoxView(chatEditVM: ChatEditBoxVM(isNeedMediaShare: true, sendButtonImage: Image(systemName: "paperplane.fill"), addMediaButtonImage: Image("add_icon"), emptyFieldPlaceholder: "Enter the message", editFieldBackgroundColor: Color.red.opacity(0.3), editFieldForegroundColor: .black, editFieldFont: Font.system(size: 15)), text: .constant("Hi"), imageSelectionType: .single) { type in
+            switch type {
+            case .addMedia:
+                break
+            case .send:
+                break
+            }
+        }
     }
 }

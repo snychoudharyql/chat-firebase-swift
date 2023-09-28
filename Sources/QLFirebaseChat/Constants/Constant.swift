@@ -30,3 +30,6 @@ let kLibrary = "Choose from Library"
 let kPhoto = "Take Photo"
 let kActionSheetTitle = "Select a Photo"
 let kImagePlaceHolder = "image_placeholder"
+let kCancel = "Cancel"
+let mediaTitles = ["Camera", "Photo Library"]
+let mediaImages = ["camera", "photo"]

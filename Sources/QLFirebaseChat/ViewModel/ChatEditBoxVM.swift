@@ -1,5 +1,5 @@
 //
-//  ChatEditVM.swift
+//  ChatEditBoxVM.swift
 //  FirebaseChatExample
 //
 //  Created by Abhishek Pandey on 26/09/23.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public class ChatEditVM: ObservableObject {
+public class ChatEditBoxVM: ObservableObject {
     // MARK: - Properties
 
     @Published var isNeedMediaShare = true

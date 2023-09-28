@@ -37,8 +37,6 @@ public class FirebaseAuthManager {
                 completion(.success(user))
             } else if let error {
                 completion(.failure(error))
-            } else {
-                // Handle unexpected case
             }
         }
     }

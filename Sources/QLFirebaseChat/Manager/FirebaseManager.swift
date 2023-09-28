@@ -43,7 +43,7 @@ public class FirebaseManager {
     public func fetchUsers(fromCollection collectionName: String, completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
         database.collection(collectionName).addSnapshotListener { querySnapshot, error in
             if let error {
-                debugPrint("Error fetching users: \(error.localizedDescription)")
+                debugLog(logType: .error, text: "Error fetching users: \(error.localizedDescription)")
                 completion(nil)
                 return
             }
@@ -57,7 +57,7 @@ public class FirebaseManager {
     public func fetchChatList(with collection: CollectionType, completion: @escaping ([QueryDocumentSnapshot]?) -> Void) {
         database.collection(collection.rawValue).whereField(kUsers, arrayContains: getCurrentUser(with: .UID)).addSnapshotListener { querySnapshot, error in
             if let error {
-                debugPrint("Error fetching users: \(error.localizedDescription)")
+                debugLog(logType: .error, text: "Error fetching chats: \(error.localizedDescription)")
                 completion(nil)
             }
 
@@ -91,7 +91,7 @@ public class FirebaseManager {
         let usersCollection = database.collection(kUsers)
         usersCollection.whereField(type.rawValue, isEqualTo: uid).getDocuments { querySnapshot, error in
             if let error {
-                debugPrint("Error getting user document: \(error.localizedDescription)")
+                debugLog(logType: .error, text: "Error getting user document: \(error.localizedDescription)")
                 completion(nil, nil)
             } else {
                 if let document = querySnapshot?.documents.first {
@@ -148,7 +148,7 @@ public class FirebaseManager {
         let parentDocumentReference = database.collection(kMessages).document(documentID)
         parentDocumentReference.collection(kMessage).order(by: kSendTime, descending: false).addSnapshotListener { querySnapshot, error in
             if let error {
-                debugPrint("Error fetching documents: \(error.localizedDescription)")
+                debugLog(logType: .error, text: "Error fetching documents: \(error.localizedDescription)")
             } else {
                 if let documents = querySnapshot?.documents {
                     completion(documents)
@@ -165,7 +165,7 @@ public class FirebaseManager {
             .whereField(kUsers, arrayContains: user)
             .getDocuments { querySnapshot, error in
                 if let error {
-                    debugPrint("Error fetching users: \(error.localizedDescription)")
+                    debugLog(logType: .error, text: "Error fetching users: \(error.localizedDescription)")
                     completion(nil)
                 }
 
@@ -181,10 +181,10 @@ public class FirebaseManager {
     public func lastMessageUpdate(with collection: CollectionType, data: [String: Any], documentID: String, message _: String, completion: @escaping (Bool?) -> Void) {
         database.collection(collection.rawValue).document(documentID).updateData(data) { error in
             if let error {
-                debugPrint("Error updating document: \(error)")
+                debugLog(logType: .error, text: "Error updating document: \(error)")
                 completion(false)
             } else {
-                debugPrint("Document successfully updated.")
+                debugLog(logType: .success, text: "Document successfully updated.")
                 completion(true)
             }
         }
@@ -201,7 +201,7 @@ public class FirebaseManager {
         metadata.contentType = contentType == .image ? "image/jpeg" : "video/mp4"
         mediaRef.putData(data, metadata: metadata) { _, error in
             if let error {
-                debugPrint("Error uploading media: \(error)")
+                debugLog(logType: .error, text: "Error uploading media: \(error)")
                 completion(nil)
             } else {
                 mediaRef.downloadURL { url, error in
@@ -209,7 +209,7 @@ public class FirebaseManager {
                         let urlString = downloadURL.absoluteString
                         completion(urlString)
                     } else {
-                        debugPrint("Error getting download URL: \(String(describing: error))")
+                        debugLog(logType: .error, text: "Error getting download URL: \(String(describing: error))")
                         completion(nil)
                     }
                 }
