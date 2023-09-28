@@ -32,7 +32,7 @@ public struct ChatEditBoxView: View {
     // MARK: Body
 
     public var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             HStack {
                 if chatEditVM.isNeedMediaShare {
                     addMediaButton
