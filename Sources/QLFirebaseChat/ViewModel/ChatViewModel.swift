@@ -11,34 +11,35 @@ import SwiftUI
 public class ChatViewModel: ObservableObject {
     // MARK: - Properties
 
-    @Published var users = [User]()
-    @Published var chatList = [ChatUser]()
+    @Published var userChatList: [ChatUser]
     @Published var initiatedDocumentID = ""
     var collectionType = CollectionType.users
 
     /// Customize properties of UI
-    let headerBackgroundColor: Color
-    let headerTitle: String
-    let addGroupIcon: String
-    let headerForegroundColor: Color
-    let headerTitleFont: Font
+    let navigationBarBackgroundColor: Color
+    let navigationBarTitle: String
+    let navigationBarRightButtonImage: String
+    let navigationBarTitleForegroundColor: Color
+    let navigationBarTitleFont: Font
 
     // MARK: Initialization
 
-    public init(title: String, headerBackgroundColor: Color, iconName: String, headerForegroundColor: Color = .black, headerTitleFont: Font) {
-        self.headerBackgroundColor = headerBackgroundColor
-        headerTitle = title
-        addGroupIcon = iconName
-        self.headerForegroundColor = headerForegroundColor
-        self.headerTitleFont = headerTitleFont
+    init(userChatList: [ChatUser] = [ChatUser](), initiatedDocumentID: String = "", collectionType: CollectionType = CollectionType.users, navigationBarBackgroundColor: Color, navigationBarTitle: String, navigationBarRightButtonImage: String, navigationBarTitleForegroundColor: Color, navigationBarTitleFont: Font) {
+        self.userChatList = userChatList
+        self.initiatedDocumentID = initiatedDocumentID
+        self.collectionType = collectionType
+        self.navigationBarBackgroundColor = navigationBarBackgroundColor
+        self.navigationBarTitle = navigationBarTitle
+        self.navigationBarRightButtonImage = navigationBarRightButtonImage
+        self.navigationBarTitleForegroundColor = navigationBarTitleForegroundColor
+        self.navigationBarTitleFont = navigationBarTitleFont
     }
 
     // MARK: Get Chat List
 
-    public func getChatList() {
-        FirebaseManager.shared.fetchChatList(with: .messages) { [weak self] fetchChatList in
+    public func getUserChatList() {
+        QLFirebaseManager.shared.fetchChatList(with: .messages) { [weak self] fetchChatList in
             guard let self else { return }
-
             if let snapshots = fetchChatList {
                 var chatMembers = [ChatUser]()
                 let group = DispatchGroup()
@@ -50,10 +51,10 @@ public class ChatViewModel: ObservableObject {
                         chatMembers.append(message)
 
                         if message.users?.count == 2 {
-                            message.users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser(with: .UID) }
+                            message.users?.removeAll { $0 == QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID) }
                             if let firstUserID = message.users?.first {
                                 group.enter()
-                                FirebaseManager.shared.getUserDetail(forUID: firstUserID, type: .UID) { name, _ in
+                                QLFirebaseManager.shared.getChatUserDetail(with: firstUserID, type: .UID) { name, _ in
                                     if let memberName = name {
                                         message.receiverName = memberName
                                     }
@@ -69,10 +70,10 @@ public class ChatViewModel: ObservableObject {
                 }
 
                 group.notify(queue: .main) {
-                    self.chatList = chatMembers
+                    self.userChatList = chatMembers
                 }
             } else {
-                self.chatList = []
+                self.userChatList = []
             }
         }
     }

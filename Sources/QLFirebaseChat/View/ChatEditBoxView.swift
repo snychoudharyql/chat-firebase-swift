@@ -43,7 +43,7 @@ public struct ChatEditBoxView: View {
 
             /// isActionSheetPresented:  is used for to present action sheet
             if isActionSheetPresented {
-                ActionSheetView { result in
+                QLActionSheetView { result in
                     if let result {
                         if result == 0 {
                             // open camera
@@ -63,7 +63,7 @@ public struct ChatEditBoxView: View {
 
         /// isCameraOpen : is used to get teh images from the camera
         .sheet(isPresented: $isCameraPresented) {
-            CFImagePicker(images: $selectedImage, sourceType: .camera) { images in
+            QLImagePicker(images: $selectedImage, sourceType: .camera) { images in
                 callback?(.addMedia(images))
                 selectedImage = []
             }
@@ -72,12 +72,12 @@ public struct ChatEditBoxView: View {
         /// isGallerySelected:  is used to get the media from the gallery
         .sheet(isPresented: $isGalleryPresented) {
             if pickerSelectionType == .single {
-                CFImagePicker(images: $selectedImage, sourceType: .photoLibrary) { images in
+                QLImagePicker(images: $selectedImage, sourceType: .photoLibrary) { images in
                     callback?(.addMedia(images))
                     selectedImage = []
                 }
             } else if pickerSelectionType == .multiple {
-                CFPhotoPicker(selectedImages: $selectedImage, isPresented: $isGalleryPresented) { images in
+                QLPhotoPicker(selectedImages: $selectedImage, isPresented: $isGalleryPresented) { images in
                     callback?(.addMedia(images))
                     selectedImage = []
                 }
@@ -95,7 +95,7 @@ public struct ChatEditBoxView: View {
                     .foregroundColor(chatEditVM.editFieldForegroundColor)
                     .padding(.leading, 8)
             }
-            ExpandableTextView(
+            QLExpandableTextView(
                 text: $text,
                 foregroundColor: chatEditVM.editFieldForegroundColor,
                 backgroundColor: chatEditVM.editFieldBackgroundColor,
@@ -154,19 +154,6 @@ public struct ChatEditBoxView: View {
         isGalleryPresented = option == .gallery
         withAnimation {
             isActionSheetPresented = false
-        }
-    }
-}
-
-struct ChatEditBoxView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatEditBoxView(chatEditVM: ChatEditBoxVM(isNeedMediaShare: true, sendButtonImage: Image(systemName: "paperplane.fill"), addMediaButtonImage: Image("add_icon"), emptyFieldPlaceholder: "Enter the message", editFieldBackgroundColor: Color.red.opacity(0.3), editFieldForegroundColor: .black, editFieldFont: Font.system(size: 15)), text: .constant("Hi"), imageSelectionType: .single) { type in
-            switch type {
-            case .addMedia:
-                break
-            case .send:
-                break
-            }
         }
     }
 }

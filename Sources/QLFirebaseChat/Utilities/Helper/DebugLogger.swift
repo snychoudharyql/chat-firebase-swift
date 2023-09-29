@@ -1,8 +1,8 @@
 //
 //  DebugLogger.swift
-//  BaseProject
+//  QLFirebaseManager
 //
-//  Created by Himanshu Kesharwani on 07/06/23.
+//  Created by Abhishek Pandey on 29/09/23.
 //
 
 import Foundation
