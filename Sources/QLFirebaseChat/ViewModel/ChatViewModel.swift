@@ -24,7 +24,7 @@ public class ChatViewModel: ObservableObject {
 
     // MARK: Initialization
 
-    init(userChatList: [ChatUser] = [ChatUser](), initiatedDocumentID: String = "", collectionType: CollectionType = CollectionType.users, navigationBarBackgroundColor: Color, navigationBarTitle: String, navigationBarRightButtonImage: String, navigationBarTitleForegroundColor: Color, navigationBarTitleFont: Font) {
+    public init(userChatList: [ChatUser] = [ChatUser](), initiatedDocumentID: String = "", collectionType: CollectionType = CollectionType.users, navigationBarBackgroundColor: Color, navigationBarTitle: String, navigationBarRightButtonImage: String, navigationBarTitleForegroundColor: Color, navigationBarTitleFont: Font) {
         self.userChatList = userChatList
         self.initiatedDocumentID = initiatedDocumentID
         self.collectionType = collectionType

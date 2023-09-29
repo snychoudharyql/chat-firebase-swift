@@ -5,7 +5,7 @@
 //  Created by Abhishek Pandey on 15/09/23.
 //
 
-import FirebaseAuth
+import Firebase
 import Foundation
 
 public class QLFirebaseAuthenticationManager {
