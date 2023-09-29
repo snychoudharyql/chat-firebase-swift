@@ -8,7 +8,7 @@
 import Firebase
 import Foundation
 
-extension Timestamp {
+public extension Timestamp {
     func formattedDateWithAMPM(with dateFormat: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormat

@@ -47,13 +47,14 @@ public struct MessageMemberView: View {
         .cornerRadius(Size.fifty / 2)
     }
 
-    /// User Detail :  Add sender detail (including name, last message and time )
+    /// User Detail :  Add sender detail (including name, last message and time)
     private var userDetails: some View {
         VStack(alignment: .leading) {
             Text(chat.receiverName ?? "")
                 .font(.system(size: Size.twentyTwo))
                 .fontWeight(.medium)
             Text(chat.lastMessage ?? "")
+                .lineLimit(2)
                 .font(.caption)
                 .foregroundColor(.gray)
             if let timestamp = chat.messageTimeStamp {
