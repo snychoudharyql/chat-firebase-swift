@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct AsyncImageView: View {
+    // MARK: - Properties
+
     var imageURL = ""
     var placeholderImage = ""
+
+    // MARK: - Body
 
     var body: some View {
         if let url = URL(string: imageURL) {

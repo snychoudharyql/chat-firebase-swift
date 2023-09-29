@@ -9,6 +9,8 @@ import SwiftUI
 import UIKit
 
 struct ExpandableTextView: UIViewRepresentable {
+    // MARK: - Properties
+
     @Binding var text: String
     var foregroundColor = Color.black
     var backgroundColor = Color.clear
@@ -24,6 +26,7 @@ struct ExpandableTextView: UIViewRepresentable {
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 3, bottom: 10, right: 8)
         textView.textContainer.maximumNumberOfLines = .max
         textView.textContainer.lineBreakMode = .byWordWrapping
+        textView.autocorrectionType = .no
         textView.delegate = context.coordinator
 
         return textView
@@ -46,7 +49,6 @@ struct ExpandableTextView: UIViewRepresentable {
 
         func textViewDidChange(_ textView: UITextView) {
             expandTextView(textView: textView)
-            // expandTextView(textView)
         }
 
         func expandTextView(textView: UITextView) {
