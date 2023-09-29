@@ -12,6 +12,7 @@
 		8C195EA52AB80D1A00EA267A /* CustomMessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C195EA42AB80D1A00EA267A /* CustomMessageInputView.swift */; };
 		8C195EAE2AB8107900EA267A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C195EAD2AB8107900EA267A /* Message.swift */; };
 		8C195EB82AB83A8E00EA267A /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C195EB72AB83A8E00EA267A /* ChatMessageView.swift */; };
+		8C2208CE2AC6858600B9B366 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2208CD2AC6858600B9B366 /* DebugLogger.swift */; };
 		8C289E132AC1499700595C1C /* InputTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C289E122AC1499700595C1C /* InputTextFieldView.swift */; };
 		8C3721F42AC3E717001DA8CE /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3721F32AC3E717001DA8CE /* AsyncImageView.swift */; };
 		8C3B06B72ABD599E00D88BBE /* MessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B06B62ABD599D00D88BBE /* MessageViewModel.swift */; };
@@ -41,6 +42,7 @@
 		8C195EA42AB80D1A00EA267A /* CustomMessageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessageInputView.swift; sourceTree = "<group>"; };
 		8C195EAD2AB8107900EA267A /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		8C195EB72AB83A8E00EA267A /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
+		8C2208CD2AC6858600B9B366 /* DebugLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		8C289E122AC1499700595C1C /* InputTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextFieldView.swift; sourceTree = "<group>"; };
 		8C3721F32AC3E717001DA8CE /* AsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
 		8C3B06B62ABD599D00D88BBE /* MessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModel.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				8C195EA02AB809C700EA267A /* Constant.swift */,
+				8C2208CD2AC6858600B9B366 /* DebugLogger.swift */,
 				8C6C8F232ABC4077002D4026 /* ContactManager.swift */,
 			);
 			path = Helpers;
@@ -333,6 +336,7 @@
 				8C195EA12AB809C700EA267A /* Constant.swift in Sources */,
 				8C195EB82AB83A8E00EA267A /* ChatMessageView.swift in Sources */,
 				8CE391022AB469830068AF14 /* EdgeBorder.swift in Sources */,
+				8C2208CE2AC6858600B9B366 /* DebugLogger.swift in Sources */,
 				8CB704BE2AB864A500516D00 /* ToastView.swift in Sources */,
 				8C3B06B72ABD599E00D88BBE /* MessageViewModel.swift in Sources */,
 				8CE391002AB469830068AF14 /* GradientButtonStyle.swift in Sources */,

@@ -42,11 +42,11 @@ class MessageViewModel: ObservableObject {
         chat["group_name"] = ""
         chat["created_by"]  = FirebaseManager.shared.getCurrentUser(with: .UID)
         chat["created_at"] = Timestamp(date: Date())
-            FirebaseManager.shared.createGroup(with: chat, collection: .messages) { isSuccess, document in
+            FirebaseManager.shared.createGroup(with: chat, collection: .messages) { [weak self] isSuccess, document in
                 if isSuccess {
                     
-                    self.message(text: text, documentID: document, mediaList: mediaList)
-                    self.initiatedDocumentID = document
+                    self?.message(text: text, documentID: document, mediaList: mediaList)
+                    self?.initiatedDocumentID = document
                 }
                 
             }
@@ -87,7 +87,7 @@ class MessageViewModel: ObservableObject {
                                     let message = try queryDocumentSnapshot.data(as: MessageModel.self)
                                     return message
                                 } catch {
-                                    debugPrint("Error decoding user: \(error.localizedDescription)")
+                                    debugLog(logType: .error,text: "Error decoding user: \(error.localizedDescription)")
                                     return nil
                                 }
                             }
@@ -178,11 +178,9 @@ class MessageViewModel: ObservableObject {
                 if let url = fetchPath {
                     imageURLs.append(url)
                 } else {
-                    debugPrint("Unable to fetch url path from firebase storage")
+                    debugLog(logType: .error,text: "Unable to fetch url path from firebase storage")
                 }
                 group.leave()
-                
-               
             }
         }
         
@@ -190,7 +188,7 @@ class MessageViewModel: ObservableObject {
             if !imageURLs.isEmpty {
                 self.message(text: "", documentID: documentID, mediaList: imageURLs)
             } else {
-                debugPrint("Unable to fetch images path")
+                debugLog(logType: .error,text: "Unable to fetch images path")
             }
         }
         
