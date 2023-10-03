@@ -26,13 +26,13 @@ struct DashboardView: View {
         }
     }
     
-    @StateObject var chatViewModel = ChatViewModel(title: "Message", headerBackgroundColor: .blue, iconName: kAddGroup, headerForegroundColor: .white, headerTitleFont: .system(size: 30))
+    @StateObject var chatViewModel = ChatViewModel( navigationBarBackgroundColor: .blue, navigationBarTitle: "Message", navigationBarRightButtonImage: kAddGroup, navigationBarTitleForegroundColor: .white, navigationBarTitleFont: .system(size: 30))
     @State private var selectionType: SelectionType = .none
     
     // MARK: - Body
     
     var body: some View {
-        ChatListView(delegate: self, chatViewModel: chatViewModel, headerHeight: 60)
+        UserChatListView(delegate: self, chatViewModel: chatViewModel, headerHeight: ConstantSize.sixty)
         NavigationLink(
             "",
             destination: destinationView,

@@ -1,6 +1,6 @@
 //
 //  UserViewModel.swift
-//  FireStoreProject
+//  FirebaseChatExample
 //
 //  Created by Abhishek Pandey on 13/09/23.
 //
@@ -25,7 +25,7 @@ class UserViewModel: ObservableObject {
     func loginUser(email: String, password: String) {
         if !email.isEmpty, !password.isEmpty {
             isLoading = true
-            FirebaseAuthManager.shared.loginUser(email: email, password: password) { result in
+            QLFirebaseAuthenticationManager.shared.loginChatUser(email: email, password: password) { result in
                 self.isLoading = false
                 switch result {
                 case .success:
@@ -43,7 +43,7 @@ class UserViewModel: ObservableObject {
     func registerUser(email: String, password: String) {
         if !email.isEmpty, !password.isEmpty, !userName.isEmpty{
             isLoading = true
-            FirebaseAuthManager.shared.registerUser(email: email, password: password) { result in
+            QLFirebaseAuthenticationManager.shared.registerChatUser(email: email, password: password) { result in
                 self.isLoading  = false
                 switch result {
                 case .success(let user):
@@ -66,7 +66,7 @@ class UserViewModel: ObservableObject {
         user["name"] = userName
         user["email"] = userEmailID.lowercased()
         user["uid"]  = userId
-        FirebaseManager.shared.addNewUser(with: user, id: userId, collection: .users) { isSuccess in
+        QLFirebaseManager.shared.addChatUser(with: user, id: userId, collection: .users) { isSuccess in
             self.isUserSuccessfulLogin = isSuccess
         }
     }

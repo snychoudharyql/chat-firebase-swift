@@ -25,10 +25,10 @@ struct MessageView: View {
         VStack(alignment: messageHorizontalAlignment) {
             if let images = message.images, !images.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    VStack(spacing: 10) {
+                    VStack(spacing: ConstantSize.ten) {
                         ForEach(images, id: \.self) { imageURL in
                             AsyncImageView(imageURL: imageURL, placeholderImage: kImagePlaceHolder)
-                                .cornerRadius(10)
+                                .cornerRadius(ConstantSize.ten)
                                 .frame(width: 100, height: 100)
                         }
                     }
@@ -43,7 +43,7 @@ struct MessageView: View {
                     if showTime, let time = message.senderTime {
                         Text("\(time.formattedDateWithAMPM(with: "dd/MM/yy"))")
                             .foregroundColor(textColor)
-                            .font(.system(size: 8))
+                            .font(.system(size: 7))
                             .fontWeight(.regular)
                             
                     }
@@ -51,26 +51,26 @@ struct MessageView: View {
             }
             Spacer()
         }
-        .frame(maxWidth: .infinity, alignment: message.senderID != FirebaseManager.shared.getCurrentUser(with: .UID) ? .leading : .trailing)
+        .frame(maxWidth: .infinity, alignment: message.senderID != QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID) ? .leading : .trailing)
         .padding(paddingAlignment)
-        .padding(.horizontal, 10)
+        .padding(.horizontal, ConstantSize.ten)
         
     }
     
     // MARK: -  Components Helpers
     private var textColor: Color {
-        return message.senderID != FirebaseManager.shared.getCurrentUser(with: .UID) ? receiverTextForegroundColor : senderTextForegorundColor
+        return message.senderID != QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID) ? receiverTextForegroundColor : senderTextForegorundColor
     }
     
     private var backgroundColor: Color {
-        return message.senderID != FirebaseManager.shared.getCurrentUser(with: .UID) ? receiverViewBackgroundColor : senderViewBackgroundColor
+        return message.senderID != QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID) ? receiverViewBackgroundColor : senderViewBackgroundColor
     }
     private var messageHorizontalAlignment: HorizontalAlignment {
-        return message.senderID != FirebaseManager.shared.getCurrentUser(with: .UID) ? .leading : .trailing
+        return message.senderID != QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID) ? .leading : .trailing
     }
     
     private var paddingAlignment: Edge.Set {
-           return message.senderID != FirebaseManager.shared.getCurrentUser(with: .UID) ? .leading : .trailing
+           return message.senderID != QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID) ? .leading : .trailing
        }
 }
 

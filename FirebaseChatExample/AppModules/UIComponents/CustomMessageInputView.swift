@@ -16,7 +16,6 @@ struct CustomMessageInputView: View {
     @State private var message = ""
     var documentID = ""
     var receiverID = ""
-    @State var textLine = 1
     var chatVM = ChatEditBoxVM(isNeedMediaShare: true, sendButtonImage: Image(systemName: "paperplane.fill"), addMediaButtonImage: Image("add_icon"), emptyFieldPlaceholder: "Enter the message", editFieldBackgroundColor: Color(Colors.peach).opacity(0.3), editFieldForegroundColor: .black, editFieldFont: Font.system(size: 15))
     
     // MARK: - Body
@@ -44,9 +43,9 @@ struct CustomMessageInputView: View {
         if !documentID.isEmpty {
             messagesManager.message(text: message, documentID: documentID)
         } else if !messagesManager.initiatedDocumentID.isEmpty {
-            messagesManager.message(text: message, documentID: messagesManager.initiatedDocumentID)
+            messagesManager.message(text: message.trimmingCharacters(in: .whitespacesAndNewlines), documentID: messagesManager.initiatedDocumentID)
         } else {
-            messagesManager.chatInitiateWithMessage(uIDs: [FirebaseManager.shared.getCurrentUser(with: .UID), receiverID], text: message)
+            messagesManager.chatInitiateWithMessage(uIDs: [QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID), receiverID], text: message.trimmingCharacters(in: .whitespacesAndNewlines))
         }
         message = ""
     }

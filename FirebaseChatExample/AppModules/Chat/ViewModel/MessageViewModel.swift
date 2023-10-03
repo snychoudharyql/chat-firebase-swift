@@ -26,9 +26,9 @@ class MessageViewModel: ObservableObject {
         var chat = [String: Any]()
         chat["users"] = uIDs
         chat["group_name"] = groupName
-        chat["created_by"]  = FirebaseManager.shared.getCurrentUser(with: .UID)
+        chat["created_by"]  = QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID)
         chat["created_at"] = Timestamp(date: Date())
-        FirebaseManager.shared.createGroup(with: chat, collection: .messages) { isSuccess, _ in
+        QLFirebaseManager.shared.createChat(with: chat, collection: .messages) { isSuccess, _ in
             callback(true)
         }
         
@@ -40,11 +40,10 @@ class MessageViewModel: ObservableObject {
         var chat = [String: Any]()
         chat["users"] = uIDs
         chat["group_name"] = ""
-        chat["created_by"]  = FirebaseManager.shared.getCurrentUser(with: .UID)
+        chat["created_by"]  = QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID)
         chat["created_at"] = Timestamp(date: Date())
-            FirebaseManager.shared.createGroup(with: chat, collection: .messages) { [weak self] isSuccess, document in
+            QLFirebaseManager.shared.createChat(with: chat, collection: .messages) { [weak self] isSuccess, document in
                 if isSuccess {
-                    
                     self?.message(text: text, documentID: document, mediaList: mediaList)
                     self?.initiatedDocumentID = document
                 }
@@ -57,10 +56,10 @@ class MessageViewModel: ObservableObject {
     func message(text: String, documentID: String, mediaList: [String] = []) {
         var message = [String: Any]()
         message["text"] = text
-        message["sender_id"]  = FirebaseManager.shared.getCurrentUser(with: .UID)
+        message["sender_id"]  = QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID)
         message["send_time"] = Timestamp(date: Date())
         message["urls"] = mediaList
-        FirebaseManager.shared.sendMessage(with: documentID, message: message, type: .message) { isSuccess in
+        QLFirebaseManager.shared.sendChatMessage(with: documentID, message: message, type: .message) { isSuccess in
             if isSuccess {
                 self.messageList(documentID: documentID)
                 let dataToUpdate: [String: Any] = [
@@ -68,7 +67,7 @@ class MessageViewModel: ObservableObject {
                     "created_at": Timestamp(date: Date())
                 ]
                 
-                FirebaseManager.shared.lastMessageUpdate(with: .messages, data: dataToUpdate, documentID: documentID, message: text) { isSuccess in
+                QLFirebaseManager.shared.updateLastChatMessage(with: .messages, data: dataToUpdate, documentID: documentID, message: text) { isSuccess in
                 }
             }
         }
@@ -76,7 +75,7 @@ class MessageViewModel: ObservableObject {
     
     func messageList(documentID: String) {
         if !documentID.isEmpty {
-            FirebaseManager.shared.fetchMessages(with: documentID) { fetchChatList in
+            QLFirebaseManager.shared.fetchChatMessages(forChat: documentID) { fetchChatList in
                 if fetchChatList == nil {
                     self.messageList = []
                 } else {
@@ -108,7 +107,7 @@ class MessageViewModel: ObservableObject {
             
             for i in 0..<fetchUser.count {
                 group.enter()
-                FirebaseManager.shared.getUserDetail(forUID: fetchUser[i].email ?? "", type: .email) { name, uid in
+                QLFirebaseManager.shared.getChatUserDetail(with: fetchUser[i].email ?? "", type: .email) { name, uid in
                     fetchUser[i].isOnContact = !(name == nil)
                     fetchUser[i].uid = uid ?? ""
                     group.leave()
@@ -124,7 +123,7 @@ class MessageViewModel: ObservableObject {
     
     /// Check selected member have any chat with the current
     func isMemberChatInitiated(with uID: String,completion: @escaping ([ChatListUser]?) ->Void){
-        FirebaseManager.shared.getIndividualChat(user: uID) { fetchChatList in
+        QLFirebaseManager.shared.fetchMessagesForIndividualChat(with: uID) { fetchChatList in
             if fetchChatList == nil {
                 completion([])
             } else {
@@ -146,9 +145,9 @@ class MessageViewModel: ObservableObject {
                     group.leave()
                     for i in 0..<chatMemebers.count {
                         group.enter()
-                        chatMemebers[i].users?.removeAll { $0 == FirebaseManager.shared.getCurrentUser(with: .UID) }
+                        chatMemebers[i].users?.removeAll { $0 == QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID) }
                         if let firstUserID = chatMemebers[i].users?.first {
-                            FirebaseManager.shared.getUserDetail(forUID: firstUserID, type: .UID) { name, _ in
+                            QLFirebaseManager.shared.getChatUserDetail(with: firstUserID, type: .UID) { name, _ in
                                 if let memberName = name {
                                     chatMemebers[i].receiverName = memberName
                                 }
@@ -174,7 +173,7 @@ class MessageViewModel: ObservableObject {
         for image in images {
             
             group.enter()
-            FirebaseManager.shared.uploadMediaToFirebaseStorage(data: image.jpegData(compressionQuality: 0.7)!, contentType: contentType) { fetchPath in
+            QLFirebaseManager.shared.uploadChatMedia(data: image.jpegData(compressionQuality: 0.7)!, contentType: contentType) { fetchPath in
                 if let url = fetchPath {
                     imageURLs.append(url)
                 } else {
@@ -183,7 +182,6 @@ class MessageViewModel: ObservableObject {
                 group.leave()
             }
         }
-        
         group.notify(queue: .main) {
             if !imageURLs.isEmpty {
                 self.message(text: "", documentID: documentID, mediaList: imageURLs)

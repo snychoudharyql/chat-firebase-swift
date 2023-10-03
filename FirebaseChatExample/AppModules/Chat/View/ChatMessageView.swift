@@ -30,7 +30,7 @@ struct ChatMessageView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
-                ChatNavigationHeaderView(title: memberName, backButtonImage: Image(kBackButton), profileImage: kProfile, profilePlaceholderImage: kProfile, headerHeight: 60, titleForegroundColor: .white, backgroundColor: .blue) {
+                ChatMessageNavigationBarView(title: memberName, backButtonImage: Image(kBackButton), profileImage: kProfile, profilePlaceholderImage: kProfile, headerHeight: 60, titleForegroundColor: .white, backgroundColor: .blue) {
                     dismiss()
                 }
                 messageList
@@ -71,7 +71,7 @@ struct ChatMessageView: View {
         }
     }
     
-
+    
 }
 
 

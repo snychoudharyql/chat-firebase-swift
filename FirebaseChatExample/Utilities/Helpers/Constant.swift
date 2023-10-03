@@ -42,49 +42,14 @@ public enum ChatList {
 
 let bottomTitle =  {(isLogin: Bool) in
     return isLogin ? "Create new account" : "Already have account?"
-    
 }
 
 let buttonTitle =  {(isLogin: Bool) in
     return isLogin ? "Login" : "SignUp"
-    
 }
 
 let groupButtonTittle = {(isMemberSelected: Bool) in
     return isMemberSelected ? "Remove" : "Create Group Chat"
 }
 
-enum MessageType {
-    case initiated
-    case partial
-}
 
-
-
-public enum Size {
-    static var twenty = 20.0
-    static var ten = 10.0
-    static var fifteen = 15.0
-    static var thirtyFive = 35.0
-    static var twentyFour = 24.0
-    static var fifty = 50.0
-    static var twentyTwo = 22.0
-    static var forty = 40.0
-    static var chatboxWidth = 280.0
-}
-
-public enum EditBoxSelectionType {
-    case send
-    case addMedia([UIImage])
-}
-
-enum PhotoSourceType {
-    case camera
-    case gallery
-}
-
-public enum ImagePickerSelectType {
-    case single
-    case multiple
-    case none
-}

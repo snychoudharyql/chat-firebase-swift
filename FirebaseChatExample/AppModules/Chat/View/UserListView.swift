@@ -43,7 +43,7 @@ struct UserListView: View {
                 }
                 .listStyle(.plain)
             }
-            .padding(.horizontal, 20)
+            .padding(.horizontal, ConstantSize.twenty)
             
             groupChatButton
             
@@ -69,14 +69,14 @@ struct UserListView: View {
             } label: {
                 Image(kBackButton)
                     .resizable()
-                    .frame(width: 26, height: 24)
+                    .frame(width: ConstantSize.twentySix, height: ConstantSize.twentyFour)
             }
             Text(kUserTitle)
                 .font(.title)
             Spacer()
             toggleMultiSelectionButton
         }
-        .padding(.top, 24)
+        .padding(.top, ConstantSize.twentyFour)
     }
     
     // MARK: Toggle MultiSelection Button
@@ -132,10 +132,10 @@ struct UserListView: View {
                 } label: {
                     Image(kAddMember)
                         .resizable()
-                        .frame(width: 60, height: 60)
+                        .frame(width: ConstantSize.sixty, height: ConstantSize.sixty)
                 }
-                .padding(.bottom, 20)
-                .padding(.trailing, 20)
+                .padding(.bottom, ConstantSize.twenty)
+                .padding(.trailing, ConstantSize.twenty)
             }
         }
     }
@@ -148,9 +148,10 @@ struct UserListView_Previews: PreviewProvider {
 }
 
 
-
+// MARK: - View Builders
 extension UserListView  {
     @ViewBuilder
+    // MARK: ContactUser
     func ContactUser(chatUser: User, isSelect: Bool) -> some View {
         HStack {
             Image(kProfile).resizable()
@@ -193,7 +194,7 @@ extension UserListView {
     private func createGroupChat() {
         let emailArray = selectedUsers.map { $0.uid ?? "" }
         if !groupName.isEmpty {
-            userVM.chatInitate(groupName: groupName, uIDs: ([FirebaseManager.shared.getCurrentUser(with: .UID)] + emailArray)) { isSuccess in
+            userVM.chatInitate(groupName: groupName, uIDs: ([QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID)] + emailArray)) { isSuccess in
                 dismiss()
             }
         }
