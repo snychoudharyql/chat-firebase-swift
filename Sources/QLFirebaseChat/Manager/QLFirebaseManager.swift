@@ -207,7 +207,7 @@ public class QLFirebaseManager {
     ///   - documentID: ID of the document to be updated.
     ///   - message: The last message to be updated.
     ///   - completion: Closure called after the update operation is completed.
-    public func updateLasChatMessage(with collection: CollectionType, data: [String: Any], documentID: String, message: String, completion: @escaping (Bool?) -> Void) {
+    public func updateLastChatMessage(with collection: CollectionType, data: [String: Any], documentID: String, message: String, completion: @escaping (Bool?) -> Void) {
         database.collection(collection.rawValue).document(documentID).updateData(data) { error in
             if let error {
                 debugLog(logType: .error, text: "Error updating document: \(error)")

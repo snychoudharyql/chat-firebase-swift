@@ -21,9 +21,6 @@ You can install QLFirebaseChat using Swift Package Manager (SPM). Follow these s
 
 To use Firebase services in your chat application, you need to initialize Firebase. Call the `initialize` method to configure Firebase. You should typically do this early in your app's lifecycle, such as in your app delegate's `application(_:didFinishLaunchingWithOptions:)` method.
 
-```swift
-QLChatFirebase.initialize()
-```
 This method configures Firebase with the settings specified in your project's Firebase configuration file.
 
 Make sure you have added your Firebase configuration file (usually named GoogleService-Info.plist) to your Xcode project.
@@ -44,18 +41,14 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 ```
 Once Firebase is initialized, you can use other Firebase services, such as Firestore and Authentication, in your chat application.
 
-Note: Ensure you have set up Firebase in your project by following the Firebase setup instructions provided by Firebase.
+## Usage of QLFirebaseAuthenticationManager
 
- ## Usage of Firebase Authentication:
- - Initialize an instance of FirebaseAuthManager\
-   `let authManager = FirebaseAuthManager.shared'
+ ### Register a New Chat User
 
- ### Register a New User
-
-To register a new user, use the `registerUser` method. Provide the user's email and password as parameters. Here's an example:
+To register a new chat user, use the `registerChatUser` method. Provide the user's email and password as parameters. Here's an example:
 
 ```swift
-authManager.registerUser(email: "user@example.com", password: "password") { result in
+QLFirebaseAuthenticationManager.shared.registerUser(email: "user@example.com", password: "password") { result in
     switch result {
     case .success(let user):
         print("User registration successful. User ID: \(user.uid)")
@@ -64,12 +57,12 @@ authManager.registerUser(email: "user@example.com", password: "password") { resu
     }
 }
 ```
-### Login an Existing User
+### Login an Existing Chat User
 
-To log in an existing user, use the `loginUser` method. Provide the user's email and password as parameters. Here's an example:
+To log in an existing chat user, use the `loginChatUser` method. Provide the user's email and password as parameters. Here's an example:
 
 ```swift
- authManager.loginUser(email: "user@example.com", password: "password") { result in
+ QLFirebaseAuthenticationManager.shared.loginChatUser(email: "user@example.com", password: "password") { result in
     switch result {
     case .success(let user):
         print("User login successful. User ID: \(user.uid)")
@@ -78,12 +71,12 @@ To log in an existing user, use the `loginUser` method. Provide the user's email
     }
 }
 ```
-### Logout the Current User
+### Logout the Current Chat User
 
-To log out the current user, use the logoutUser method. Here's an example:
+To log out the current chat user, use the `logoutChatUser` method. Here's an example:
 
 ```swift
-authManager.logoutUser { result in
+QLFirebaseAuthenticationManager.shared.logoutChatUser { result in
     switch result {
     case .success:
         print("User logout successful.")
@@ -93,14 +86,14 @@ authManager.logoutUser { result in
 }
 ```
 
-## Usage of Firebase Manager
+## Usage of QLFirebaseManager
 
-### Create a New User
+### Add New Chat User
 
-To register a new user, use the addNewUser method. Provide the user's data, unique ID, and collection type. Example:
+To register a new chat user, use the `addChatUser` method. Provide the user's data, unique ID, and collection type. Example:
 
 ```swift
-FirebaseManager.shared.addNewUser(with: userData, id: "uniqueUserID", collection: .users) { isSuccess in
+QLFirebaseManager.shared.addNewUser(with: userData, id: "uniqueUserID", collection: .users) { isSuccess in
     if isSuccess {
         print("User registration successful.")
     } else {
@@ -109,12 +102,12 @@ FirebaseManager.shared.addNewUser(with: userData, id: "uniqueUserID", collection
 }
 ```
 
-### Fetch User List
+### Fetch Chat User List
 
-To retrieve a list of users from a specific collection, use the fetchUsers method. Example:
+To retrieve a list of users from a specific collection, use the `fetchChatUsers` method. Example:
 
 ```swift
-FirebaseManager.shared.fetchUsers(with: "usersCollectionName") { documents in
+QLFirebaseManager.shared.fetchChatUsers(with: "usersCollectionName") { documents in
     if let users = documents {
         print("Fetched \(users.count) users.")
     } else {
@@ -123,12 +116,12 @@ FirebaseManager.shared.fetchUsers(with: "usersCollectionName") { documents in
 }
 ```
 
-### Create a Group
+### Initate a Chat 
 
-To create a new group, use the createGroup method. Provide the group data, unique ID, and collection type. Example:
+To create chat individual or in group, use the createChat method. Provide the group data, unique ID, and collection type. Example:
 
 ```swift
-FirebaseManager.shared.createGroup(with: groupData, id: "uniqueGroupID", collection: .groups) { isSuccess in
+QLFirebaseManager.shared.createChat(with: groupData, collection: .groups) { isSuccess in
     if isSuccess {
         print("Group creation successful.")
     } else {
@@ -137,12 +130,12 @@ FirebaseManager.shared.createGroup(with: groupData, id: "uniqueGroupID", collect
 }
 ```
 
-### Get User Details
+### Get Chat User Details
 
-To retrieve user details by UID, you can use the `getUserDetail` method. Provide the UID and the field type (e.g., `.UID`) to identify the user. Example:
+To retrieve user details by UID, you can use the `getChatUserDetail` method. Provide the UID and the field type (e.g., `.UID`) to identify the user. Example:
 
 ```swift
-FirebaseManager.shared.getUserDetail(forUID: "userUID", type: .UID) { userName, uid in
+QLFirebaseManager.shared.getChatUserDetail(with: "userUID", type: .UID) { userName, uid in
     if let userName = userName, let uid = uid {
         print("User Name: \(userName), User UID: \(uid)")
     } else {
@@ -151,25 +144,25 @@ FirebaseManager.shared.getUserDetail(forUID: "userUID", type: .UID) { userName, 
 }
 ```
 
-### Get Current User
+### Get Details of Logged In User
 
-To obtain the current user's information, such as email or UID, you can use the getCurrentUser method. Specify the field type (e.g., .email, .UID, .displayName) to retrieve the desired information. Example:
+To obtain the current user's information, such as email or UID, you can use the `getLoggedInUserDetails` method. Specify the field type (e.g., .email, .UID, .displayName) to retrieve the desired information. Example:
 
 ```swift
-let userEmail = FirebaseManager.shared.getCurrentUser(with: .email)
-let userUID = FirebaseManager.shared.getCurrentUser(with: .UID)
-let userDisplayName = FirebaseManager.shared.getCurrentUser(with: .displayName)
+let userEmail = QLFirebaseManager.shared.getLoggedInUserDetails(with: .email)
+let userUID = QLFirebaseManager.shared.getLoggedInUserDetails(with: .UID)
+let userDisplayName = QLFirebaseManager.shared.getLoggedInUserDetails(with: .displayName)
 
 print("User Email: \(userEmail)")
 print("User UID: \(userUID)")
 print("User Display Name: \(userDisplayName)")
 ```
-### Send Message
+### Send Chat Message
 
 To send a message to a receiver, use the sendMessage method. Provide the document ID (message identifier), message data, and the collection type (e.g., .messages) to store the message. Example:
 
 ```swift
-FirebaseManager.shared.sendMessage(with: documentID, message: messageData, type: .messages) { isSuccess in
+QLFirebaseManager.shared.sendChatMessage(with: documentID, message: messageData, type: .messages) { isSuccess in
     if isSuccess {
         print("Message sent successfully.")
     } else {
@@ -177,12 +170,12 @@ FirebaseManager.shared.sendMessage(with: documentID, message: messageData, type:
     }
 }
 ```
-### Fetch Messages
+### Fetch Chat Messages
 
 To retrieve messages for a specific document (e.g., a chat), you can use the fetchMessages method. Provide the document ID, and it will return a list of messages. Example:
 
 ```swift
-FirebaseManager.shared.fetchMessages(with: documentID) { messages in
+QLFirebaseManager.shared.fetchChatMessages(with: documentID) { messages in
     if let messages = messages {
         print("Fetched \(messages.count) messages.")
         for message in messages {
@@ -196,12 +189,12 @@ FirebaseManager.shared.fetchMessages(with: documentID) { messages in
 }
 ```
 
-### Get Individual Chat
+### Fetch Messages For IndividualChat
 
 To retrieve all messages for an individual chat user, use the getIndividualChat method. Provide the user's identifier (e.g., UID), and it will return a list of messages. Example:
 
 ```swift
-FirebaseManager.shared.getIndividualChat(user: userUID) { messages in
+QLFirebaseManager.shared.fetchMessagesForIndividualChat(user: userUID) { messages in
     if let messages = messages {
         print("Fetched \(messages.count) messages for user \(userUID).")
         for message in messages {
