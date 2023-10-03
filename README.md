@@ -48,7 +48,7 @@ Once Firebase is initialized, you can use other Firebase services, such as Fires
 To register a new chat user, use the `registerChatUser` method. Provide the user's email and password as parameters. Here's an example:
 
 ```swift
-QLFirebaseAuthenticationManager.shared.registerUser(email: "user@example.com", password: "password") { result in
+QLFirebaseAuthenticationManager.shared.registerChatUser(email: "user@example.com", password: "password") { result in
     switch result {
     case .success(let user):
         print("User registration successful. User ID: \(user.uid)")
@@ -88,12 +88,12 @@ QLFirebaseAuthenticationManager.shared.logoutChatUser { result in
 
 ## Usage of QLFirebaseManager
 
-### Add New Chat User
+### Add Chat User
 
 To register a new chat user, use the `addChatUser` method. Provide the user's data, unique ID, and collection type. Example:
 
 ```swift
-QLFirebaseManager.shared.addNewUser(with: userData, id: "uniqueUserID", collection: .users) { isSuccess in
+QLFirebaseManager.shared.addChatUser(with: userData, id: "uniqueUserID", collection: .users) { isSuccess in
     if isSuccess {
         print("User registration successful.")
     } else {
@@ -205,6 +205,24 @@ QLFirebaseManager.shared.fetchMessagesForIndividualChat(user: userUID) { message
     } else {
         print("Failed to fetch messages for user \(userUID).")
     }
+}
+```
+### Upload Chat Media
+
+The `uploadChatMedia` method allows you to upload media data (images or videos) to a storage service and obtain a download URL upon successful upload.
+
+```swift
+let mediaData: Data = ... // Your media data (image or video) here
+let contentType: ContentType = .image // or .video based on the type of media
+
+uploadChatMedia(data: mediaData, contentType: contentType) { downloadURL in
+if let downloadURL = downloadURL {
+// Media upload successful, use downloadURL for further processing
+print("Media uploaded successfully. Download URL: \(downloadURL)")
+} else {
+// Media upload failed, handle the error
+print("Error uploading media.")
+  }
 }
 ```
 ## Requirements
